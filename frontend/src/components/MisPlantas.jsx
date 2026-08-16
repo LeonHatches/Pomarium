@@ -76,7 +76,9 @@ export default function MisPlantas({ plantas, onEliminarPlanta }) {
                 </div>
                 <div className="min-w-0">
                   <p className="font-hand text-xl truncate">{planta.nombrePersonalizado}</p>
-                  <p className="text-xs text-ink/60 truncate">{planta.especieNombre}</p>
+                  <p className="text-xs text-ink/60 truncate">
+                    {t(`plant_types.${planta.especieNombre}`) === `plant_types.${planta.especieNombre}` ? planta.especieNombre : t(`plant_types.${planta.especieNombre}`)}
+                  </p>
                 </div>
               </div>
               <div>

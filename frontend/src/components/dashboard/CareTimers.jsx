@@ -250,9 +250,9 @@ export default function CareTimers({ planta, onRegistrarCuidado }) {
           tipo="agua"
           remaining={remAgua}
           maxVal={cuidados.agua.valor}
-          unit={cuidados.agua.unidad}
+          unit={t(`unit.${cuidados.agua.unidad}`)}
           label={t("care.water")}
-          sublabel={cuidados.agua.tipo}
+          sublabel={t(`careType.${cuidados.agua.tipo}`)}
           color="#4A90D9"
           colorLight="#A8CCF0"
           Icon={IconGota}
@@ -264,9 +264,9 @@ export default function CareTimers({ planta, onRegistrarCuidado }) {
           tipo="luz"
           remaining={remLuz}
           maxVal={cuidados.luz.valor}
-          unit={cuidados.luz.unidad}
+          unit={t(`unit.${cuidados.luz.unidad}`)}
           label={t("care.sunlight")}
-          sublabel={cuidados.luz.tipo}
+          sublabel={t(`careType.${cuidados.luz.tipo}`)}
           color="#E8A838"
           colorLight="#F5D18E"
           Icon={IconSol}
@@ -278,9 +278,9 @@ export default function CareTimers({ planta, onRegistrarCuidado }) {
           tipo="nutrientes"
           remaining={remNutrientes}
           maxVal={cuidados.nutrientes.valor}
-          unit={cuidados.nutrientes.unidad}
+          unit={t(`unit.${cuidados.nutrientes.unidad}`)}
           label={t("care.nutrients")}
-          sublabel={cuidados.nutrientes.tipo}
+          sublabel={t(`careType.${cuidados.nutrientes.tipo}`)}
           color="#8B6F47"
           colorLight="#C4A882"
           Icon={IconNutriente}

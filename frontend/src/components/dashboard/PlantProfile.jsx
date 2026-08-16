@@ -36,7 +36,7 @@ export default function PlantProfile({ planta }) {
 
       {/* Scientific / common name */}
       <p className="text-ink/60 text-sm sm:text-base italic text-center">
-        {t(`category.${planta.especieNombre}`) || planta.especieNombre}
+        {t(`plant_types.${planta.especieNombre}`) === `plant_types.${planta.especieNombre}` ? planta.especieNombre : t(`plant_types.${planta.especieNombre}`)}
         {metadata.cientifico && ` · "${metadata.cientifico}"`}
       </p>
 

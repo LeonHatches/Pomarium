@@ -109,6 +109,38 @@ const en = {
   "care.luzNow": "Provide sunlight!",
   "care.nutrientesNow": "Fertilize now!",
 
+  // ─── Care types ───────────────────────────────────────────────────────
+  "careType.riego ligero": "light watering",
+  "careType.indirecta": "indirect sunlight",
+  "careType.ninguno aún": "none yet",
+  "careType.riego profundo": "deep watering",
+  "careType.sol directo": "direct sun",
+  "careType.bajo en nitrógeno": "low nitrogen",
+  "careType.riego moderado": "moderate watering",
+  "careType.directa parcial": "partial direct",
+  "careType.fósforo alto": "high phosphorus",
+  "careType.riego espaciado": "spaced watering",
+  "careType.mantenimiento": "maintenance",
+  "careType.abono suave": "mild fertilizer",
+  "careType.riego regular": "regular watering",
+  "careType.rico en fósforo": "phosphorus rich",
+  "careType.semanal": "weekly",
+  "careType.directa": "direct",
+
+  // ─── Plant Types & Categories ─────────────────────────────────────────
+  "plant_types.Plantas Decorativas": "Decorative Plants",
+  "plant_types.Cactus Estrella (Astrophytum)": "Star Cactus (Astrophytum)",
+  "plant_types.Suculenta Rosa": "Pink Succulent",
+  "plant_types.Aloe Vera": "Aloe Vera",
+  "plant_types.Cultivos Rápidos": "Fast Crops",
+  "plant_types.Albahaca": "Basil",
+  "plant_types.Rábano": "Radish",
+  "plant_types.Frutos de Temporada": "Seasonal Fruits",
+  "plant_types.Tomatero": "Tomato Plant",
+  "plant_types.Fresa": "Strawberry",
+  "plant_types.Árboles a Largo Plazo": "Long-Term Trees",
+  "plant_types.Limonero": "Lemon Tree",
+
   // ─── Units ────────────────────────────────────────────────────────────
   "unit.días": "days",
   "unit.h": "h",

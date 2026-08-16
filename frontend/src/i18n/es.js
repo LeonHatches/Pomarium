@@ -110,6 +110,38 @@ const es = {
   "care.luzNow": "¡Iluminar ahora!",
   "care.nutrientesNow": "¡Fertilizar ahora!",
 
+  // ─── Care types ───────────────────────────────────────────────────────
+  "careType.riego ligero": "riego ligero",
+  "careType.indirecta": "indirecta",
+  "careType.ninguno aún": "ninguno aún",
+  "careType.riego profundo": "riego profundo",
+  "careType.sol directo": "sol directo",
+  "careType.bajo en nitrógeno": "bajo en nitrógeno",
+  "careType.riego moderado": "riego moderado",
+  "careType.directa parcial": "directa parcial",
+  "careType.fósforo alto": "fósforo alto",
+  "careType.riego espaciado": "riego espaciado",
+  "careType.mantenimiento": "mantenimiento",
+  "careType.abono suave": "abono suave",
+  "careType.riego regular": "riego regular",
+  "careType.rico en fósforo": "rico en fósforo",
+  "careType.semanal": "semanal",
+  "careType.directa": "directa",
+
+  // ─── Plant Types & Categories ─────────────────────────────────────────
+  "plant_types.Plantas Decorativas": "Plantas Decorativas",
+  "plant_types.Cactus Estrella (Astrophytum)": "Cactus Estrella (Astrophytum)",
+  "plant_types.Suculenta Rosa": "Suculenta Rosa",
+  "plant_types.Aloe Vera": "Aloe Vera",
+  "plant_types.Cultivos Rápidos": "Cultivos Rápidos",
+  "plant_types.Albahaca": "Albahaca",
+  "plant_types.Rábano": "Rábano",
+  "plant_types.Frutos de Temporada": "Frutos de Temporada",
+  "plant_types.Tomatero": "Tomatero",
+  "plant_types.Fresa": "Fresa",
+  "plant_types.Árboles a Largo Plazo": "Árboles a Largo Plazo",
+  "plant_types.Limonero": "Limonero",
+
   // ─── Units ────────────────────────────────────────────────────────────
   "unit.días": "días",
   "unit.h": "h",
