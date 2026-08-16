@@ -19,7 +19,7 @@ import GardenerAdvice from "./dashboard/GardenerAdvice";
  * Business logic (Firebase sync, stage unlocking) remains in App.jsx.
  * This component is purely presentational + local carousel state.
  */
-export default function Dashboard({ planta, onAbrirValidacion }) {
+export default function Dashboard({ planta, onAbrirValidacion, onRegistrarCuidado }) {
   if (!planta) return null;
 
   return (
@@ -27,7 +27,7 @@ export default function Dashboard({ planta, onAbrirValidacion }) {
       <PlantHeader />
       <PlantProfile planta={planta} />
       <LifecycleCarousel planta={planta} onAbrirValidacion={onAbrirValidacion} />
-      <CareTimers planta={planta} />
+      <CareTimers planta={planta} onRegistrarCuidado={onRegistrarCuidado} />
       <GardenerAdvice planta={planta} />
     </div>
   );

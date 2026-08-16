@@ -28,7 +28,7 @@ export default function PlantProfile({ planta }) {
       </div>
 
       {/* Plant custom name */}
-      <h2 className="font-hand text-5xl sm:text-6xl text-ink text-center leading-tight">
+      <h2 className="font-shantell text-5xl sm:text-6xl text-ink text-center leading-tight font-bold">
         {planta.nombrePersonalizado}
       </h2>
 

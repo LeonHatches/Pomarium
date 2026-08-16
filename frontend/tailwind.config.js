@@ -38,7 +38,8 @@ module.exports = {
       },
       fontFamily: {
         hand: ["'Patrick Hand'", "cursive"],
-        body: ["'Nunito'", "sans-serif"],
+        body: ["'Shantell Sans'", "cursive"],
+        sans: ["'Shantell Sans'", "cursive"],
       },
       boxShadow: {
         sketchy: "4px 4px 0px 0px rgba(46,42,36,0.85)",

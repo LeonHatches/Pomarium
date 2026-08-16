@@ -5,7 +5,7 @@
 /* ─── Base Typography ──────────────────────────────────────────────── */
 
 body {
-  font-family: "Nunito", sans-serif;
+  font-family: "Shantell Sans", cursive;
   background-color: #f6efdf;
   color: #2e2a24;
 }
@@ -15,6 +15,10 @@ h2,
 h3,
 .font-hand {
   font-family: "Patrick Hand", cursive;
+}
+
+.font-shantell {
+  font-family: "Shantell Sans", cursive;
 }
 
 /* ─── Sketchy Border ───────────────────────────────────────────────── */
@@ -274,6 +278,11 @@ h3,
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.02); }
 }
 
 .animate-fade-slide-up {

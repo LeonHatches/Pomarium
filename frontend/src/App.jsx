@@ -12,6 +12,7 @@ import {
   crearPlantaUsuario,
   obtenerPlantasUsuario,
   desbloquearEtapaPlanta,
+  actualizarPlantaUsuario,
 } from "./firebase";
 
 export default function App() {
@@ -65,6 +66,25 @@ export default function App() {
     setValidacionAbierta(null);
   };
 
+  const manejarCuidado = async (plantaId, tipoCuidado) => {
+    const ahora = new Date().toISOString();
+    const planta = plantas.find((p) => p.id === plantaId);
+    if (!planta) return;
+
+    const cuidadosActuales = planta.historialCuidados || {};
+    const nuevosCuidados = { ...cuidadosActuales, [tipoCuidado]: ahora };
+
+    setPlantas((prev) =>
+      prev.map((p) =>
+        p.id === plantaId ? { ...p, historialCuidados: nuevosCuidados } : p
+      )
+    );
+
+    await actualizarPlantaUsuario(usuario.uid, plantaId, {
+      historialCuidados: nuevosCuidados,
+    });
+  };
+
   if (cargandoAuth) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-cream">
@@ -92,6 +112,7 @@ export default function App() {
                 <VistaPlanta
                   plantas={plantas}
                   onAbrirValidacion={setValidacionAbierta}
+                  onRegistrarCuidado={manejarCuidado}
                 />
               }
             />
@@ -114,7 +135,7 @@ export default function App() {
 }
 
 /** Sub-vista que resuelve la planta actual a partir del parámetro de ruta. */
-function VistaPlanta({ plantas, onAbrirValidacion }) {
+function VistaPlanta({ plantas, onAbrirValidacion, onRegistrarCuidado }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -137,5 +158,11 @@ function VistaPlanta({ plantas, onAbrirValidacion }) {
     );
   }
 
-  return <Dashboard planta={planta} onAbrirValidacion={() => onAbrirValidacion(planta.id)} />;
+  return (
+    <Dashboard
+      planta={planta}
+      onAbrirValidacion={() => onAbrirValidacion(planta.id)}
+      onRegistrarCuidado={(tipo) => onRegistrarCuidado(planta.id, tipo)}
+    />
+  );
 }
