@@ -218,16 +218,7 @@ h3,
   justify-content: center;
 }
 
-.sketchy-timer-ring__value {
-  position: absolute;
-  bottom: 18%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-}
+/* __value class removed — counter text is now in normal flow below the ring */
 
 /* ─── Speech Bubble ───────────────────────────────────────────────── */
 

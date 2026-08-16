@@ -68,21 +68,23 @@ export default function App() {
 
   const manejarCuidado = async (plantaId, tipoCuidado) => {
     const ahora = new Date().toISOString();
-    const planta = plantas.find((p) => p.id === plantaId);
-    if (!planta) return;
 
-    const cuidadosActuales = planta.historialCuidados || {};
-    const nuevosCuidados = { ...cuidadosActuales, [tipoCuidado]: ahora };
+    setPlantas((prevPlantas) => {
+      const planta = prevPlantas.find((p) => p.id === plantaId);
+      if (!planta) return prevPlantas;
 
-    setPlantas((prev) =>
-      prev.map((p) =>
+      const cuidadosActuales = planta.historialCuidados || {};
+      const nuevosCuidados = { ...cuidadosActuales, [tipoCuidado]: ahora };
+
+      return prevPlantas.map((p) =>
         p.id === plantaId ? { ...p, historialCuidados: nuevosCuidados } : p
-      )
-    );
-
-    await actualizarPlantaUsuario(usuario.uid, plantaId, {
-      historialCuidados: nuevosCuidados,
+      );
     });
+
+    // Also update Firebase (async, don't wait for it to update UI)
+    actualizarPlantaUsuario(usuario.uid, plantaId, {
+      historialCuidados: { [tipoCuidado]: ahora },
+    }).catch(console.error);
   };
 
   if (cargandoAuth) {

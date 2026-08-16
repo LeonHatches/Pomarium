@@ -1,23 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { obtenerCuidados, buscarEspecie } from "../../data/catalogoPlantas";
 import { IconGota, IconSol, IconNutriente } from "../../assets/icons";
 
 /**
  * CareTimers.jsx
  * -----------------------------------------------------------------------
- * Three circular care timers in sketchy UI style matching the mockup.
- * Each ring uses hand-drawn wobbly SVG paths for both background and progress.
- * The icon sits inside the ring with the value text overlaid below.
- * Pressing the action button resets the timer for that care type.
+ * Three circular care timers in sketchy UI style.
+ *
+ * LOGIC:
+ *   - Press "Regar"/"Abonar"/"Registrar" → ring FILLS to 100% (care given)
+ *   - Over time → ring DRAINS toward 0% (care needed again)
+ *   - At 0% → button turns green = needs care now
+ *   - Never cared for → ring starts empty (0%) = needs first care
+ *
+ * Live timer updates every 30 seconds so progress bars drain in real time.
+ * Counter text is BELOW the ring, not overlapping it.
  */
 
 const RING_SIZE = 130;
 const STROKE_WIDTH = 14;
 const RADIUS = (RING_SIZE - STROKE_WIDTH) / 2 - 2;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 /**
  * Generates a slightly wobbly circle path to simulate hand-drawn look.
- * Uses 8 control points with small offsets for organic feel.
  */
 function sketchyCirclePath(cx, cy, r) {
   const points = 8;
@@ -43,51 +49,30 @@ function sketchyCirclePath(cx, cy, r) {
   return d + "Z";
 }
 
-/**
- * Generates a wobbly arc path for the progress indicator.
- * Starts at -90deg (top) and sweeps clockwise by the given fraction.
- */
-function sketchyArcPath(cx, cy, r, fraction, startAngle = -Math.PI / 2) {
-  if (fraction <= 0) return "";
-  const endAngle = startAngle + fraction * 2 * Math.PI;
-  const points = 16;
-  const wobble = 2.5;
-  const offsets = [
-    [1.1, -0.7], [-1.3, 1.1], [0.8, -1.2], [-0.9, 0.6],
-    [1.4, -0.4], [-0.7, 1.5], [0.4, -1.0], [-1.1, 0.8],
-    [1.0, -0.6], [-1.2, 0.9], [0.7, -1.1], [-0.8, 0.5],
-    [1.3, -0.3], [-0.6, 1.3], [0.5, -0.9], [-1.0, 0.7],
-  ];
-  let d = "";
-  for (let i = 0; i <= points; i++) {
-    const t = i / points;
-    const angle = startAngle + t * (endAngle - startAngle);
-    const [ox, oy] = offsets[i % offsets.length];
-    const x = cx + (r + ox * wobble) * Math.cos(angle);
-    const y = cy + (r + oy * wobble) * Math.sin(angle);
-    if (i === 0) d += `M ${x} ${y} `;
-    else {
-      const prevT = (i - 0.5) / points;
-      const prevAngle = startAngle + prevT * (endAngle - startAngle);
-      const [pox, poy] = offsets[(i - 1) % offsets.length];
-      const cpx = cx + (r + pox * wobble * 0.6) * Math.cos(prevAngle);
-      const cpy = cy + (r + poy * wobble * 0.6) * Math.sin(prevAngle);
-      d += `Q ${cpx} ${cpy} ${x} ${y} `;
-    }
-  }
-  return d;
-}
-
-function SketchyProgressRing({ tipo, value, maxVal, unit, label, sublabel, color, colorLight, Icon, onRegistrar, btnText }) {
-  const fraction = maxVal > 0 ? Math.min(value / maxVal, 1) : 0;
+function SketchyProgressRing({
+  tipo, remaining, maxVal, unit, label, sublabel,
+  color, colorLight, Icon, onRegistrar, btnText,
+}) {
+  // remaining = how many days/hours of "charge" left
+  // fraction: 1 = full (just cared for), 0 = empty (needs care)
+  const fraction = maxVal > 0 ? Math.min(Math.max(remaining / maxVal, 0), 1) : 1;
   const center = RING_SIZE / 2;
-  const isReady = fraction >= 1 && maxVal > 0;
+  const needsCare = remaining <= 0 && maxVal > 0;
 
-  const progressPath = sketchyArcPath(center, center, RADIUS, fraction);
+  // strokeDashoffset: 0 = full circle, CIRCUMFERENCE = empty circle
+  const strokeDashoffset = CIRCUMFERENCE * (1 - fraction);
+
   const fullRingPath = sketchyCirclePath(center, center, RADIUS);
 
+  // Format the elapsed time for display
+  const elapsed = maxVal - remaining;
+  const displayText = remaining > 0
+    ? `${remaining} ${unit} restantes`
+    : `¡Necesita ${label.toLowerCase()}!`;
+
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col items-center gap-2" style={{ width: 150 }}>
+      {/* Ring — icon only inside, no text overlay */}
       <div className="sketchy-timer-ring relative" style={{ width: RING_SIZE, height: RING_SIZE }}>
         <svg
           width={RING_SIZE}
@@ -95,97 +80,106 @@ function SketchyProgressRing({ tipo, value, maxVal, unit, label, sublabel, color
           viewBox={`0 0 ${RING_SIZE} ${RING_SIZE}`}
           className="sketchy-timer-ring__svg"
         >
-          {/* Outer sketchy background ring - lighter */}
+          {/* Outer sketchy background ring */}
           <path
             d={fullRingPath}
             fill="none"
             stroke={colorLight}
             strokeWidth={STROKE_WIDTH}
-            opacity="0.35"
+            opacity="0.3"
           />
 
-          {/* Inner sketchy track - even lighter */}
+          {/* Inner sketchy track */}
           <path
-            d={fullRingPath}
+            d={sketchyCirclePath(center, center, RADIUS - 3)}
             fill="none"
             stroke={colorLight}
             strokeWidth={STROKE_WIDTH - 4}
-            opacity="0.15"
+            opacity="0.12"
           />
 
-          {/* Colored progress arc - fully sketchy */}
-          {fraction > 0 && (
-            <path
-              d={progressPath}
-              fill="none"
-              stroke={color}
-              strokeWidth={STROKE_WIDTH}
-              strokeLinecap="round"
-              style={{
-                transition: "stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1)",
-                filter: "drop-shadow(1px 1px 0px rgba(46,42,36,0.3))",
-              }}
-            />
-          )}
+          {/* Colored progress arc — drains clockwise */}
+          <circle
+            cx={center}
+            cy={center}
+            r={RADIUS}
+            fill="none"
+            stroke={color}
+            strokeWidth={STROKE_WIDTH}
+            strokeLinecap="round"
+            strokeDasharray={CIRCUMFERENCE}
+            strokeDashoffset={strokeDashoffset}
+            transform={`rotate(-90 ${center} ${center})`}
+            style={{
+              transition: "stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1)",
+              filter: "drop-shadow(1px 1px 0px rgba(46,42,36,0.3))",
+            }}
+          />
 
-          {/* Subtle outer hand-drawn accent line */}
+          {/* Hand-drawn accent line */}
           <path
             d={sketchyCirclePath(center, center, RADIUS + 3)}
             fill="none"
             stroke={color}
             strokeWidth="1.5"
-            opacity="0.15"
+            opacity="0.1"
           />
         </svg>
 
-        {/* Center icon */}
+        {/* Center icon only */}
         <div className="sketchy-timer-ring__content">
           <Icon className="w-9 h-9 sm:w-10 sm:h-10" />
         </div>
 
-        {/* Value label overlaid at bottom of ring */}
-        <div className="sketchy-timer-ring__value">
-          <span className="font-hand text-base sm:text-lg text-ink font-bold leading-none bg-cream/90 px-2.5 py-1 rounded-full sketchy-border shadow-sketchy-sm">
-            {value} / {maxVal} {unit}
-          </span>
-        </div>
-
-        {/* Ready indicator pulse */}
-        {isReady && (
-          <div className="absolute inset-0 animate-pulse" style={{ borderRadius: "50%" }}>
+        {/* Pulse animation when needs care */}
+        {needsCare && (
+          <div className="absolute inset-0 animate-pulse pointer-events-none" style={{ borderRadius: "50%" }}>
             <svg width={RING_SIZE} height={RING_SIZE} viewBox={`0 0 ${RING_SIZE} ${RING_SIZE}`}>
-              <path
-                d={fullRingPath}
-                fill="none"
-                stroke={color}
-                strokeWidth="2"
-                opacity="0.5"
-                style={{ animation: "pulse 1.5s ease-in-out infinite" }}
-              />
+              <path d={fullRingPath} fill="none" stroke={color} strokeWidth="2" opacity="0.4" />
             </svg>
           </div>
         )}
       </div>
 
-      {/* Labels below */}
+      {/* Label + sublabel */}
       <div className="text-center">
         <p className="font-hand text-lg text-ink font-bold">{label}</p>
-        <p className="text-xs text-ink/50 -mt-1">{sublabel}</p>
+        <p className="text-xs text-ink/50">{sublabel}</p>
       </div>
+
+      {/* Counter text — BELOW the ring, never overlapping */}
+      {maxVal > 0 ? (
+        <div className="text-center">
+          <span
+            className={`font-hand text-base font-bold leading-none px-3 py-1 inline-block sketchy-border ${
+              needsCare
+                ? "bg-leaf text-cream"
+                : "bg-cream-dark text-ink"
+            }`}
+          >
+            {displayText}
+          </span>
+        </div>
+      ) : (
+        <div className="text-center font-hand text-sm text-ink/40 italic py-1">
+          No requiere aún
+        </div>
+      )}
 
       {/* Action Button */}
       {maxVal > 0 ? (
         <button
           onClick={() => onRegistrar(tipo)}
-          className={`mt-2 font-hand text-base px-5 py-2 sketchy-border shadow-sketchy-sm transition-all hover:-translate-y-0.5 active:translate-y-0 ${
-            isReady ? "bg-leaf text-cream shadow-sketchy" : "bg-cream-dark text-ink"
+          className={`font-hand text-base px-5 py-2 sketchy-border shadow-sketchy-sm transition-all hover:-translate-y-0.5 active:translate-y-0 ${
+            needsCare
+              ? "bg-leaf text-cream shadow-sketchy"
+              : "bg-cream-dark text-ink"
           }`}
-          disabled={!isReady}
         >
-          {btnText}
+          {needsCare ? `¡${btnText} ahora!` : btnText}
         </button>
       ) : (
-        <div className="mt-2 font-hand text-sm px-4 py-1 text-ink/40 italic">
+        <div className="font-hand text-sm px-4 py-1 text-ink/40 italic">
           No requiere
         </div>
       )}
@@ -193,17 +187,32 @@ function SketchyProgressRing({ tipo, value, maxVal, unit, label, sublabel, color
   );
 }
 
-function calcularTranscurrido(planta, tipo, unidad) {
-  const lastTimeStr = planta.historialCuidados?.[tipo] || planta.fechaInicio;
-  const lastTime = lastTimeStr ? new Date(lastTimeStr).getTime() : Date.now();
+/**
+ * Calculates how many days/hours of "charge" remain since last care.
+ * - Never cared for → 0 (empty ring, needs care immediately)
+ * - Just cared for → maxVal (full ring)
+ * - Over time → drains from maxVal toward 0
+ */
+function calcularRestante(planta, tipo, unidad, maxVal) {
+  const lastTimeStr = planta.historialCuidados?.[tipo];
+
+  // Never cared for → ring empty, needs first care
+  if (!lastTimeStr) return 0;
+
+  const lastTime = new Date(lastTimeStr).getTime();
   const diffMs = Math.max(0, Date.now() - lastTime);
 
+  let elapsed;
   if (unidad === "días") {
-    return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    elapsed = diffMs / (1000 * 60 * 60 * 24); // fractional days
   } else if (unidad === "h") {
-    return Math.floor(diffMs / (1000 * 60 * 60));
+    elapsed = diffMs / (1000 * 60 * 60); // fractional hours
+  } else {
+    elapsed = 0;
   }
-  return 0;
+
+  // Remaining = max - elapsed, clamped to [0, maxVal]
+  return Math.max(0, Math.round((maxVal - elapsed) * 10) / 10);
 }
 
 export default function CareTimers({ planta, onRegistrarCuidado }) {
@@ -211,13 +220,21 @@ export default function CareTimers({ planta, onRegistrarCuidado }) {
   const cuidados = obtenerCuidados(planta.especieId, etapaActual);
   const especie = buscarEspecie(planta.especieId);
 
-  const transAgua = calcularTranscurrido(planta, "agua", cuidados.agua.unidad);
-  const transLuz = calcularTranscurrido(planta, "luz", cuidados.luz.unidad);
-  const transNutrientes = calcularTranscurrido(planta, "nutrientes", cuidados.nutrientes.unidad);
+  // Live timer: re-render every 30s so rings drain smoothly over time
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setTick((t) => t + 1), 30_000);
+    return () => clearInterval(id);
+  }, []);
+  void tick;
+
+  const remAgua = calcularRestante(planta, "agua", cuidados.agua.unidad, cuidados.agua.valor);
+  const remLuz = calcularRestante(planta, "luz", cuidados.luz.unidad, cuidados.luz.valor);
+  const remNutrientes = calcularRestante(planta, "nutrientes", cuidados.nutrientes.unidad, cuidados.nutrientes.valor);
 
   return (
     <div className="dashboard-section" style={{ animationDelay: "0.3s" }}>
-      {/* Section header with sketchy underline */}
+      {/* Section header */}
       <div className="flex items-center justify-between flex-wrap gap-2 mb-8 px-2">
         <h2 className="font-hand text-2xl sm:text-3xl text-ink">
           Cuidados · {etapaActual}
@@ -228,10 +245,10 @@ export default function CareTimers({ planta, onRegistrarCuidado }) {
       </div>
 
       {/* Three sketchy rings */}
-      <div className="flex flex-wrap items-start justify-center gap-6 sm:gap-16">
+      <div className="flex flex-wrap items-start justify-center gap-6 sm:gap-12">
         <SketchyProgressRing
           tipo="agua"
-          value={transAgua}
+          remaining={remAgua}
           maxVal={cuidados.agua.valor}
           unit={cuidados.agua.unidad}
           label="Agua"
@@ -244,7 +261,7 @@ export default function CareTimers({ planta, onRegistrarCuidado }) {
         />
         <SketchyProgressRing
           tipo="luz"
-          value={transLuz}
+          remaining={remLuz}
           maxVal={cuidados.luz.valor}
           unit={cuidados.luz.unidad}
           label="Luz solar"
@@ -257,7 +274,7 @@ export default function CareTimers({ planta, onRegistrarCuidado }) {
         />
         <SketchyProgressRing
           tipo="nutrientes"
-          value={transNutrientes}
+          remaining={remNutrientes}
           maxVal={cuidados.nutrientes.valor}
           unit={cuidados.nutrientes.unidad}
           label="Nutrientes"

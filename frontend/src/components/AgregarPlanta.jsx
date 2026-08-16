@@ -87,7 +87,7 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
       diasDeVida,
       etapaActual: etapaInicial,
       etapas: {
-        Brote: { desbloqueada: true, fotoURL: null, fechaDesbloqueo: null },
+        Brote: { desbloqueada: false, fotoURL: null, fechaDesbloqueo: null },
         "Etapa Vegetativa": { desbloqueada: etapaInicial !== "Brote", fotoURL: null, fechaDesbloqueo: null },
         Floración: {
           desbloqueada: etapaInicial === "Floración" || etapaInicial === "Madurez",

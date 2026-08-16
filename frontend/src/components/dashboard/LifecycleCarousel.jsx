@@ -32,7 +32,15 @@ function StageCard({ etapa, indice, planta, offset, onSubirFoto }) {
   const IconoEspecie = obtenerIconoPlanta(planta.especieId);
   const info = planta.etapas?.[etapa];
   const desbloqueada = !!info?.desbloqueada;
-  const esActual = etapa === (planta.etapaActual || "Brote");
+  const etapaActualNombre = planta.etapaActual || "Brote";
+  const idxActual = indiceEtapa(etapaActualNombre);
+  const esActual = etapa === etapaActualNombre;
+  const etapaActualYaDesbloqueada = !!planta.etapas?.[etapaActualNombre]?.desbloqueada;
+  // Show "Subir foto" on current stage if not unlocked,
+  // OR on the next stage if the current one is already unlocked (to advance)
+  const puedeSubirFoto = !desbloqueada && (
+    esActual || (indice === idxActual + 1 && etapaActualYaDesbloqueada)
+  );
   const diasVida = planta.diasDeVida || 0;
   const isActive = offset === 0;
 
@@ -89,9 +97,9 @@ function StageCard({ etapa, indice, planta, offset, onSubirFoto }) {
       {/* Status badge */}
       {desbloqueada ? (
         <span className="stage-badge stage-badge--completed text-sm">
-          ✓ día {diasVida || "?"}
+          ✓ día {diasVida ?? "?"}
         </span>
-      ) : esActual ? (
+      ) : puedeSubirFoto ? (
         <button
           onClick={(e) => {
             e.stopPropagation();

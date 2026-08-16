@@ -31,8 +31,10 @@ export default function ModalDesbloqueo({
 
   if (!abierto) return null;
 
-  const indiceActual = ETAPAS.indexOf(planta.etapaActual);
-  const siguienteEtapa = ETAPAS[Math.min(indiceActual + 1, ETAPAS.length - 1)];
+  // Find the first stage that hasn't been unlocked yet (could be the current one)
+  const etapaObjetivo = ETAPAS.find(
+    (et) => !planta.etapas?.[et]?.desbloqueada
+  ) || ETAPAS[ETAPAS.length - 1];
 
   const manejarArchivo = (e) => {
     const f = e.target.files[0];
@@ -47,7 +49,7 @@ export default function ModalDesbloqueo({
     if (!archivo) return;
     try {
       setEstado("subiendo");
-      const urlDescarga = await subirFotoPlanta(uid, planta.id, siguienteEtapa, archivo);
+      const urlDescarga = await subirFotoPlanta(uid, planta.id, etapaObjetivo, archivo);
 
       setEstado("validando");
       const respuesta = await fetch(`${API_BASE_URL}/api/validar-planta`, {
@@ -56,7 +58,7 @@ export default function ModalDesbloqueo({
         body: JSON.stringify({
           imageUrl: urlDescarga,
           nombrePlanta: planta.especieNombre,
-          etapaActual: siguienteEtapa,
+          etapaActual: etapaObjetivo,
         }),
       });
 
@@ -66,7 +68,7 @@ export default function ModalDesbloqueo({
       if (data.esValida) {
         setEstado("ok");
         setMensaje("¡Foto validada! Tu planta avanzó de etapa 🌿");
-        onDesbloqueado?.(siguienteEtapa, urlDescarga);
+        onDesbloqueado?.(etapaObjetivo, urlDescarga);
       } else {
         setEstado("error");
         setMensaje("La foto no coincide con la etapa actual. Intenta de nuevo.");
@@ -93,7 +95,7 @@ export default function ModalDesbloqueo({
         </div>
 
         <p className="text-xs text-ink/60 mb-3">
-          Sube una foto que muestre la etapa "{siguienteEtapa}".
+          Sube una foto que muestre la etapa "{etapaObjetivo}".
         </p>
 
         <label className="sketchy-border bg-cream-dark flex flex-col items-center justify-center gap-2 p-6 cursor-pointer shadow-sketchy-sm">
