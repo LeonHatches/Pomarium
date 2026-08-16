@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Nunito", sans-serif;
+  background-color: #f6efdf;
+  color: #2e2a24;
+}
+
+h1,
+h2,
+h3,
+.font-hand {
+  font-family: "Patrick Hand", cursive;
+}
+
+/* Trazo "dibujado a mano" reutilizable para bordes sketchy */
+.sketchy-border {
+  border: 2.5px solid #2e2a24;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
