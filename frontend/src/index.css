@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Base Typography ──────────────────────────────────────────────── */
+
 body {
   font-family: "Nunito", sans-serif;
   background-color: #f6efdf;
@@ -15,8 +17,321 @@ h3,
   font-family: "Patrick Hand", cursive;
 }
 
+/* ─── Sketchy Border ───────────────────────────────────────────────── */
+
 /* Trazo "dibujado a mano" reutilizable para bordes sketchy */
 .sketchy-border {
   border: 2.5px solid #2e2a24;
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+/* ─── Tags ─────────────────────────────────────────────────────────── */
+
+.tag-outline {
+  display: inline-block;
+  padding: 3px 16px;
+  font-family: "Patrick Hand", cursive;
+  font-size: 1rem;
+  border: 2.5px solid #2e2a24;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  background: transparent;
+  color: #2e2a24;
+}
+
+.tag-filled {
+  display: inline-block;
+  padding: 3px 16px;
+  font-family: "Patrick Hand", cursive;
+  font-size: 1rem;
+  border: 2.5px solid #2e2a24;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  background: #E3B23C;
+  color: #2e2a24;
+}
+
+/* ─── Sketchy Evolution Progress Bar ──────────────────────────────── */
+
+.evolution-bar-sketchy {
+  position: relative;
+  width: 100%;
+  height: 14px;
+  background: rgba(46, 42, 36, 0.08);
+  border: 2.5px solid #2e2a24;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  overflow: visible;
+}
+
+.evolution-bar-sketchy__fill {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  height: calc(100% + 2px);
+  background: linear-gradient(90deg, #7FA679, #4E7A51);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  border: 2px solid #33532F;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 2px 2px 0px 0px rgba(46, 42, 36, 0.4);
+}
+
+.evolution-bar-sketchy__marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.evolution-bar-sketchy__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #2e2a24;
+  background: #F6EFDF;
+  transition: all 0.3s ease;
+}
+
+.evolution-bar-sketchy__dot--active {
+  background: #4E7A51;
+  border-color: #33532F;
+  box-shadow: 0 0 0 2px #F6EFDF, 0 0 0 3.5px #33532F;
+}
+
+/* ─── Lifecycle Carousel ──────────────────────────────────────────── */
+
+.carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 340px;
+  overflow: hidden;
+  padding: 24px 0;
+}
+
+.carousel-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.carousel-card {
+  position: absolute;
+  width: 250px;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  border: 2.5px solid #2e2a24;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  background: #F6EFDF;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 3px 3px 0px 0px rgba(46, 42, 36, 0.3);
+}
+
+.carousel-card--active {
+  position: relative;
+  z-index: 10;
+  transform: scale(1);
+  opacity: 1;
+  border-color: #4E7A51;
+  border-width: 3.5px;
+  background: #FDFBF5;
+  box-shadow: 5px 5px 0px 0px rgba(46, 42, 36, 0.85);
+}
+
+.carousel-card--prev {
+  z-index: 5;
+  transform: translateX(-62%) scale(0.8);
+  opacity: 0.5;
+  filter: grayscale(0.3);
+}
+
+.carousel-card--next {
+  z-index: 5;
+  transform: translateX(62%) scale(0.8);
+  opacity: 0.5;
+  filter: grayscale(0.3);
+}
+
+.carousel-card--hidden {
+  z-index: 1;
+  transform: scale(0.6);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ─── Carousel Progress Dots ──────────────────────────────────────── */
+
+.carousel-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #2e2a24;
+  border-radius: 2px;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot--completed {
+  background: #4E7A51;
+}
+
+.carousel-dot--active {
+  background: #4E7A51;
+  width: 26px;
+  border-radius: 3px;
+}
+
+/* ─── Sketchy Timer Ring ──────────────────────────────────────────── */
+
+.sketchy-timer-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sketchy-timer-ring__svg {
+  transform: rotate(0deg);
+}
+
+.sketchy-timer-ring__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sketchy-timer-ring__value {
+  position: absolute;
+  bottom: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+/* ─── Speech Bubble ───────────────────────────────────────────────── */
+
+.speech-bubble {
+  position: relative;
+  border: 2.5px solid #2e2a24;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  background: #F6EFDF;
+  padding: 22px 28px;
+  box-shadow: 4px 4px 0px 0px rgba(46, 42, 36, 0.85);
+}
+
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 14px solid #F6EFDF;
+  filter: drop-shadow(0px 2px 0px rgba(46, 42, 36, 0.85));
+}
+
+.speech-bubble::before {
+  content: "";
+  position: absolute;
+  bottom: -17px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top: 17px solid #2e2a24;
+}
+
+/* ─── Entry Animations ────────────────────────────────────────────── */
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-slide-up {
+  animation: fadeSlideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-delay-1 { animation-delay: 0.1s; }
+.animate-delay-2 { animation-delay: 0.2s; }
+.animate-delay-3 { animation-delay: 0.3s; }
+.animate-delay-4 { animation-delay: 0.4s; }
+
+/* ─── Dashboard Page Sections ─────────────────────────────────────── */
+
+.dashboard-section {
+  opacity: 0;
+  animation: fadeSlideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ─── Sketchy Card (main white area in mockup) ────────────────────── */
+
+.sketchy-card {
+  border: 2.5px solid #2e2a24;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  background: #FDFBF5;
+  box-shadow: 4px 4px 0px 0px rgba(46, 42, 36, 0.85);
+}
+
+/* ─── Stage Badge ─────────────────────────────────────────────────── */
+
+.stage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 18px;
+  font-family: "Patrick Hand", cursive;
+  font-size: 0.95rem;
+  border: 2.5px solid #2e2a24;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  background: #4E7A51;
+  color: #F6EFDF;
+  box-shadow: 2px 2px 0px 0px rgba(46, 42, 36, 0.6);
+}
+
+.stage-badge--completed {
+  background: #4E7A51;
+}
+
+.stage-badge--pending {
+  background: #C97B4A;
+}
+
+/* ─── Sketchy Divider ─────────────────────────────────────────────── */
+
+.sketchy-divider {
+  width: 100%;
+  height: 0;
+  border: none;
+  border-top: 2.5px solid rgba(46, 42, 36, 0.15);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  margin: 8px 0;
 }

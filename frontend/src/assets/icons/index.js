@@ -20,3 +20,6 @@ export { default as IconSol } from "./IconSol";
 export { default as IconNutriente } from "./IconNutriente";
 export { default as IconMenu } from "./IconMenu";
 export { default as IconCerrar } from "./IconCerrar";
+export { default as IconFlor } from "./IconFlor";
+export { default as IconFlechaIzq } from "./IconFlechaIzq";
+export { default as IconFlechaDer } from "./IconFlechaDer";
