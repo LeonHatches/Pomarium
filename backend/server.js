@@ -11,12 +11,12 @@ app.use(express.json({ limit: "10mb" }));
 
 app.use("/api", plantaRoutes);
 
-// Servir archivos estáticos del frontend (React)
-app.use(express.static(path.join(__dirname, "../frontend/build")));
+// Servir archivos estáticos del frontend (React) desde la carpeta 'public'
+app.use(express.static(path.join(__dirname, "public")));
 
 // Ruta comodín (catch-all) para que React Router maneje las URLs del frontend
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 const PORT = process.env.PORT || 4000;
