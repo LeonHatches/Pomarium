@@ -335,3 +335,53 @@ h3,
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
   margin: 8px 0;
 }
+
+/* ─── Sketchy Datepicker ──────────────────────────────────────────── */
+
+.sketchy-datepicker-container .react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker {
+  font-family: "Patrick Hand", cursive !important;
+  background-color: #F6EFDF !important;
+  border: 2.5px solid #2e2a24 !important;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px !important;
+  box-shadow: 4px 4px 0px 0px rgba(46, 42, 36, 0.85) !important;
+  color: #2e2a24 !important;
+}
+
+.react-datepicker__header {
+  background-color: #E3B23C !important;
+  border-bottom: 2.5px solid #2e2a24 !important;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px !important;
+}
+
+.react-datepicker__current-month {
+  font-family: "Patrick Hand", cursive !important;
+  color: #2e2a24 !important;
+  font-size: 1.2rem !important;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day {
+  color: #2e2a24 !important;
+  font-size: 1rem !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #4E7A51 !important;
+  color: #F6EFDF !important;
+  border-radius: 50% !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: rgba(78, 122, 81, 0.3) !important;
+  border-radius: 50% !important;
+}
+
+.react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle::before,
+.react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle::after {
+  display: none; /* Hide triangles to make the popup look cleaner and more sketchy */
+}

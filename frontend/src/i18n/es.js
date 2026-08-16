@@ -71,6 +71,7 @@ const es = {
   "agregar.errorName": "Ponle un nombre a tu planta para continuar.",
   "agregar.errorTime": "Indica cuánto tiempo tiene tu planta.",
   "agregar.errorDate": "Elige la fecha en que empezó tu planta.",
+  "agregar.datePlaceholder": "dd/mm/aaaa",
   "agregar.saving": "Guardando...",
   "agregar.submit": "Registrar planta 🌱",
   "agregar.errorSave": "No se pudo guardar la planta. Intenta de nuevo.",
@@ -100,14 +101,14 @@ const es = {
   "care.notRequired": "No requiere aún",
   "care.notRequiredShort": "No requiere",
   "care.water": "Agua",
-  "care.sunlight": "Luz solar",
+  "care.sunlight": "Luz",
   "care.nutrients": "Nutrientes",
   "care.waterBtn": "Regar",
-  "care.sunBtn": "Registrar",
-  "care.nutrientsBtn": "Abonar",
-  "care.waterNow": "¡Regar ahora!",
-  "care.sunNow": "¡Registrar ahora!",
-  "care.nutrientsNow": "¡Abonar ahora!",
+  "care.sunBtn": "Iluminar",
+  "care.nutrientsBtn": "Fertilizar",
+  "care.aguaNow": "¡Regar ahora!",
+  "care.luzNow": "¡Iluminar ahora!",
+  "care.nutrientesNow": "¡Fertilizar ahora!",
 
   // ─── Units ────────────────────────────────────────────────────────────
   "unit.días": "días",
@@ -147,6 +148,26 @@ const es = {
   "category.Cultivos Rápidos": "Cultivos Rápidos",
   "category.Frutos de Temporada": "Frutos de Temporada",
   "category.Árboles a Largo Plazo": "Árboles a Largo Plazo",
+  
+  // ─── Plant Names ──────────────────────────────────────────────────────
+  "category.Cactus Estrella (Astrophytum)": "Cactus Estrella (Astrophytum)",
+  "category.Suculenta Rosa": "Suculenta Rosa",
+  "category.Aloe Vera": "Aloe Vera",
+  "category.Albahaca": "Albahaca",
+  "category.Rábano": "Rábano",
+  "category.Tomatero": "Tomatero",
+  "category.Fresa": "Fresa",
+  "category.Limonero": "Limonero",
+
+  // ─── Families ─────────────────────────────────────────────────────────
+  "category.Cactaceae": "Cactaceae",
+  "category.Crassulaceae": "Crassulaceae",
+  "category.Asphodelaceae": "Asphodelaceae",
+  "category.Lamiaceae": "Lamiaceae",
+  "category.Brassicaceae": "Brassicaceae",
+  "category.Solanaceae": "Solanaceae",
+  "category.Rosaceae": "Rosaceae",
+  "category.Rutaceae": "Rutaceae",
 
   // ─── Duration labels (from catalog) ───────────────────────────────────
   "duration.Semanas a meses": "Semanas a meses",

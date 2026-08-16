@@ -5,6 +5,10 @@ import { resolverInicioPlanta } from "../utils/etapas";
 import { obtenerIconoPlanta } from "../assets/plants";
 import { IconCandado } from "../assets/icons";
 import { useI18n } from "../i18n/I18nContext";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import es from "date-fns/locale/es";
+import enUS from "date-fns/locale/en-US";
 
 /**
  * AgregarPlanta.jsx
@@ -23,7 +27,7 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
   const [paso, setPaso] = useState(1); // 1 categoría, 2 especie, 3 formulario
   const [categoriaElegida, setCategoriaElegida] = useState(null);
   const [especieElegida, setEspecieElegida] = useState(null);
-  const { t } = useI18n();
+  const { t, idioma } = useI18n();
 
   const [nombrePersonalizado, setNombrePersonalizado] = useState("");
   const [modoTiempo, setModoTiempo] = useState("cantidad"); // "cantidad" | "fecha"
@@ -238,13 +242,27 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
                 </select>
               </div>
             ) : (
-              <input
-                type="date"
-                value={fecha}
-                max={new Date().toISOString().slice(0, 10)}
-                onChange={(e) => setFecha(e.target.value)}
-                className="sketchy-border bg-cream px-4 py-2 outline-none w-full focus:shadow-sketchy-sm"
-              />
+              <div className="w-full relative sketchy-datepicker-container">
+                <DatePicker
+                  selected={fecha ? new Date(fecha + "T12:00:00") : null}
+                  onChange={(date) => {
+                    if (date) {
+                      const yyyy = date.getFullYear();
+                      const mm = String(date.getMonth() + 1).padStart(2, "0");
+                      const dd = String(date.getDate()).padStart(2, "0");
+                      setFecha(`${yyyy}-${mm}-${dd}`);
+                    } else {
+                      setFecha("");
+                    }
+                  }}
+                  maxDate={new Date()}
+                  locale={idioma === "en" ? enUS : es}
+                  dateFormat={idioma === "en" ? "MM/dd/yyyy" : "dd/MM/yyyy"}
+                  placeholderText={t("agregar.datePlaceholder")}
+                  className="sketchy-border bg-cream px-4 py-2 outline-none w-full focus:shadow-sketchy-sm"
+                  wrapperClassName="w-full"
+                />
+              </div>
             )}
             <p className="text-xs text-ink/60 mt-2">
               {t("agregar.timeHint")}

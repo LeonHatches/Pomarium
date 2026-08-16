@@ -70,6 +70,7 @@ const en = {
   "agregar.errorName": "Give your plant a name to continue.",
   "agregar.errorTime": "Enter how old your plant is.",
   "agregar.errorDate": "Choose the date your plant started.",
+  "agregar.datePlaceholder": "dd/mm/yyyy",
   "agregar.saving": "Saving...",
   "agregar.submit": "Register plant 🌱",
   "agregar.errorSave": "Couldn't save the plant. Please try again.",
@@ -102,11 +103,11 @@ const en = {
   "care.sunlight": "Sunlight",
   "care.nutrients": "Nutrients",
   "care.waterBtn": "Water",
-  "care.sunBtn": "Log",
+  "care.sunBtn": "Sunlight",
   "care.nutrientsBtn": "Fertilize",
-  "care.waterNow": "Water now!",
-  "care.sunNow": "Log now!",
-  "care.nutrientsNow": "Fertilize now!",
+  "care.aguaNow": "Water now!",
+  "care.luzNow": "Provide sunlight!",
+  "care.nutrientesNow": "Fertilize now!",
 
   // ─── Units ────────────────────────────────────────────────────────────
   "unit.días": "days",
@@ -146,6 +147,26 @@ const en = {
   "category.Cultivos Rápidos": "Quick Crops",
   "category.Frutos de Temporada": "Seasonal Fruits",
   "category.Árboles a Largo Plazo": "Long-term Trees",
+
+  // ─── Plant Names ──────────────────────────────────────────────────────
+  "category.Cactus Estrella (Astrophytum)": "Star Cactus (Astrophytum)",
+  "category.Suculenta Rosa": "Pink Succulent",
+  "category.Aloe Vera": "Aloe Vera",
+  "category.Albahaca": "Basil",
+  "category.Rábano": "Radish",
+  "category.Tomatero": "Tomato Plant",
+  "category.Fresa": "Strawberry",
+  "category.Limonero": "Lemon Tree",
+
+  // ─── Families ─────────────────────────────────────────────────────────
+  "category.Cactaceae": "Cactaceae",
+  "category.Crassulaceae": "Crassulaceae",
+  "category.Asphodelaceae": "Asphodelaceae",
+  "category.Lamiaceae": "Lamiaceae",
+  "category.Brassicaceae": "Brassicaceae",
+  "category.Solanaceae": "Solanaceae",
+  "category.Rosaceae": "Rosaceae",
+  "category.Rutaceae": "Rutaceae",
 
   // ─── Duration labels (from catalog) ───────────────────────────────────
   "duration.Semanas a meses": "Weeks to months",

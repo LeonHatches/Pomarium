@@ -65,8 +65,6 @@ function SketchyProgressRing({
 
   const fullRingPath = sketchyCirclePath(center, center, RADIUS);
 
-  // Format the elapsed time for display
-  const elapsed = maxVal - remaining;
   const displayText = remaining > 0
     ? t("care.remaining", remaining, t(`unit.${unit}`))
     : t("care.needsNow", label.toLowerCase());
@@ -177,7 +175,7 @@ function SketchyProgressRing({
               : "bg-cream-dark text-ink"
           }`}
         >
-          {needsCare ? `¡${btnText} ahora!` : btnText}
+          {needsCare ? t(`care.${tipo}Now`) : btnText}
         </button>
       ) : (
         <div className="font-hand text-sm px-4 py-1 text-ink/40 italic">
