@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { obtenerCuidados, buscarEspecie } from "../../data/catalogoPlantas";
 import { IconGota, IconSol, IconNutriente } from "../../assets/icons";
+import { useI18n } from "../../i18n/I18nContext";
 
 /**
  * CareTimers.jsx
@@ -51,7 +52,7 @@ function sketchyCirclePath(cx, cy, r) {
 
 function SketchyProgressRing({
   tipo, remaining, maxVal, unit, label, sublabel,
-  color, colorLight, Icon, onRegistrar, btnText,
+  color, colorLight, Icon, onRegistrar, btnText, t
 }) {
   // remaining = how many days/hours of "charge" left
   // fraction: 1 = full (just cared for), 0 = empty (needs care)
@@ -67,8 +68,8 @@ function SketchyProgressRing({
   // Format the elapsed time for display
   const elapsed = maxVal - remaining;
   const displayText = remaining > 0
-    ? `${remaining} ${unit} restantes`
-    : `¡Necesita ${label.toLowerCase()}!`;
+    ? t("care.remaining", remaining, t(`unit.${unit}`))
+    : t("care.needsNow", label.toLowerCase());
 
   return (
     <div className="flex flex-col items-center gap-2" style={{ width: 150 }}>
@@ -162,7 +163,7 @@ function SketchyProgressRing({
         </div>
       ) : (
         <div className="text-center font-hand text-sm text-ink/40 italic py-1">
-          No requiere aún
+          {t("care.notRequired")}
         </div>
       )}
 
@@ -180,7 +181,7 @@ function SketchyProgressRing({
         </button>
       ) : (
         <div className="font-hand text-sm px-4 py-1 text-ink/40 italic">
-          No requiere
+          {t("care.notRequiredShort")}
         </div>
       )}
     </div>
@@ -216,6 +217,7 @@ function calcularRestante(planta, tipo, unidad, maxVal) {
 }
 
 export default function CareTimers({ planta, onRegistrarCuidado }) {
+  const { t } = useI18n();
   const etapaActual = planta.etapaActual || "Brote";
   const cuidados = obtenerCuidados(planta.especieId, etapaActual);
   const especie = buscarEspecie(planta.especieId);
@@ -237,10 +239,10 @@ export default function CareTimers({ planta, onRegistrarCuidado }) {
       {/* Section header */}
       <div className="flex items-center justify-between flex-wrap gap-2 mb-8 px-2">
         <h2 className="font-hand text-2xl sm:text-3xl text-ink">
-          Cuidados · {etapaActual}
+          {t("care.sectionTitle", t(`stage.${etapaActual}`))}
         </h2>
         <p className="text-sm text-ink/50 italic font-hand">
-          {especie?.nombre || planta.especieNombre} · {DURACIONES_ETAPA[etapaActual] || ""}
+          {t(`category.${especie?.nombre}`) || especie?.nombre || planta.especieNombre} · {t(`lifecycle.duration.${etapaActual}`) || ""}
         </p>
       </div>
 
@@ -251,49 +253,45 @@ export default function CareTimers({ planta, onRegistrarCuidado }) {
           remaining={remAgua}
           maxVal={cuidados.agua.valor}
           unit={cuidados.agua.unidad}
-          label="Agua"
+          label={t("care.water")}
           sublabel={cuidados.agua.tipo}
           color="#4A90D9"
           colorLight="#A8CCF0"
           Icon={IconGota}
           onRegistrar={onRegistrarCuidado}
-          btnText="Regar"
+          btnText={t("care.waterBtn")}
+          t={t}
         />
         <SketchyProgressRing
           tipo="luz"
           remaining={remLuz}
           maxVal={cuidados.luz.valor}
           unit={cuidados.luz.unidad}
-          label="Luz solar"
+          label={t("care.sunlight")}
           sublabel={cuidados.luz.tipo}
           color="#E8A838"
           colorLight="#F5D18E"
           Icon={IconSol}
           onRegistrar={onRegistrarCuidado}
-          btnText="Registrar"
+          btnText={t("care.sunBtn")}
+          t={t}
         />
         <SketchyProgressRing
           tipo="nutrientes"
           remaining={remNutrientes}
           maxVal={cuidados.nutrientes.valor}
           unit={cuidados.nutrientes.unidad}
-          label="Nutrientes"
+          label={t("care.nutrients")}
           sublabel={cuidados.nutrientes.tipo}
           color="#8B6F47"
           colorLight="#C4A882"
           Icon={IconNutriente}
           onRegistrar={onRegistrarCuidado}
-          btnText="Abonar"
+          btnText={t("care.nutrientsBtn")}
+          t={t}
         />
       </div>
     </div>
   );
 }
-
-/** Duration labels for the section subtitle. */
-const DURACIONES_ETAPA = {
-  Brote: "1 – 2 semanas",
-  "Etapa Vegetativa": "3 – 10 semanas",
-  Floración: "según especie",
-  Madurez: "permanente",
-};
+

@@ -2,6 +2,7 @@ import React from "react";
 import { ETAPAS, obtenerMetadata } from "../../data/catalogoPlantas";
 import { obtenerIconoPlanta } from "../../assets/plants";
 import { indiceEtapa } from "../../utils/etapas";
+import { useI18n } from "../../i18n/I18nContext";
 
 /**
  * PlantProfile.jsx
@@ -10,6 +11,7 @@ import { indiceEtapa } from "../../utils/etapas";
  * stage label underneath, and "Árbol de evolución" sketchy progress bar.
  */
 export default function PlantProfile({ planta }) {
+  const { t } = useI18n();
   const metadata = obtenerMetadata(planta.especieId);
   const IconoEspecie = obtenerIconoPlanta(planta.especieId);
   const etapaActual = planta.etapaActual || "Brote";
@@ -23,8 +25,8 @@ export default function PlantProfile({ planta }) {
     >
       {/* Tags */}
       <div className="flex items-center gap-3 flex-wrap justify-center">
-        <span className="tag-outline">{metadata.familia}</span>
-        <span className="tag-filled">{metadata.dificultad}</span>
+        <span className="tag-outline">{t(`category.${metadata.familia}`) || metadata.familia}</span>
+        <span className="tag-filled">{t(`difficulty.${metadata.dificultad}`) || metadata.dificultad}</span>
       </div>
 
       {/* Plant custom name */}
@@ -34,7 +36,7 @@ export default function PlantProfile({ planta }) {
 
       {/* Scientific / common name */}
       <p className="text-ink/60 text-sm sm:text-base italic text-center">
-        {planta.especieNombre}
+        {t(`category.${planta.especieNombre}`) || planta.especieNombre}
         {metadata.cientifico && ` · "${metadata.cientifico}"`}
       </p>
 
@@ -57,13 +59,13 @@ export default function PlantProfile({ planta }) {
 
       {/* Current stage label below the plant frame */}
       <div className="stage-badge text-base">
-        {etapaActual}
+        {t(`stage.${etapaActual}`)}
       </div>
 
       {/* ── Árbol de evolución ── */}
       <div className="w-full max-w-sm mt-2">
         <h3 className="font-hand text-xl text-ink mb-3 text-center">
-          Árbol de evolución
+          {t("profile.evolutionTree")}
         </h3>
 
         {/* Sketchy progress bar */}

@@ -1,5 +1,6 @@
 import React from "react";
 import { Jardinero } from "../../assets/character";
+import { useI18n } from "../../i18n/I18nContext";
 
 /**
  * GardenerAdvice.jsx
@@ -9,20 +10,10 @@ import { Jardinero } from "../../assets/character";
  * to the character, matching the mockup's comic-book style.
  */
 
-const CONSEJOS_POR_ETAPA = {
-  Brote:
-    "¡Tu plantita apenas despierta! Mantenle la tierra húmeda pero sin encharcar, y no la expongas al sol directo todavía.",
-  "Etapa Vegetativa":
-    "\"Cuando veas que las costillas se le marcan, ahí sí, dale un buen trago de agua y deja que se seque del todo. Y gíralo cada semana, que si no te crece torcido buscando la ventana.\"",
-  Floración:
-    "¡Se acercan las flores! No la muevas de lugar ahora. Dale un poquito de abono rico en fósforo y sé paciente — la belleza toma su tiempo.",
-  Madurez:
-    "Tu planta llegó lejos, ¡felicidades! Ahora toca mantenerla feliz: riego espaciado, buena luz y un abono suave cada mes.",
-};
-
 export default function GardenerAdvice({ planta }) {
+  const { t } = useI18n();
   const etapaActual = planta.etapaActual || "Brote";
-  const consejo = CONSEJOS_POR_ETAPA[etapaActual] || CONSEJOS_POR_ETAPA["Brote"];
+  const consejo = t(`gardener.advice.${etapaActual}`) || t("gardener.advice.Brote");
 
   return (
     <div
@@ -39,7 +30,7 @@ export default function GardenerAdvice({ planta }) {
       {/* Don Tomás */}
       <div className="flex flex-col items-center mt-2">
         <Jardinero className="w-28 h-28 sm:w-36 sm:h-36" />
-        <p className="font-hand text-base text-ink/70 mt-1">Don Tomás</p>
+        <p className="font-hand text-base text-ink/70 mt-1">{t("gardener.name")}</p>
       </div>
     </div>
   );

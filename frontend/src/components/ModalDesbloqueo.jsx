@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { subirFotoPlanta } from "../firebase";
 import { ETAPAS } from "../data/catalogoPlantas";
 import { IconCamara, IconCerrar } from "../assets/icons";
+import { useI18n } from "../i18n/I18nContext";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:4000";
 
@@ -28,6 +29,7 @@ export default function ModalDesbloqueo({
   const [previsualizacion, setPrevisualizacion] = useState(null);
   const [estado, setEstado] = useState("idle"); // idle | subiendo | validando | ok | error
   const [mensaje, setMensaje] = useState("");
+  const { t } = useI18n();
 
   if (!abierto) return null;
 
@@ -67,15 +69,15 @@ export default function ModalDesbloqueo({
 
       if (data.esValida) {
         setEstado("ok");
-        setMensaje("¡Foto validada! Tu planta avanzó de etapa 🌿");
+        setMensaje(t("modal.successMsg"));
         onDesbloqueado?.(etapaObjetivo, urlDescarga);
       } else {
         setEstado("error");
-        setMensaje("La foto no coincide con la etapa actual. Intenta de nuevo.");
+        setMensaje(t("modal.failMsg"));
       }
     } catch (err) {
       setEstado("error");
-      setMensaje("Ocurrió un problema al validar la foto. Intenta de nuevo.");
+      setMensaje(t("modal.errorMsg"));
     }
   };
 
@@ -84,7 +86,7 @@ export default function ModalDesbloqueo({
       <div className="sketchy-border bg-cream shadow-sketchy p-6 w-full max-w-md">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-hand text-2xl text-leaf-dark">
-            Valida tu {planta?.especieNombre}
+            {t("modal.validateTitle", t(`category.${planta?.especieNombre}`) || planta?.especieNombre)}
           </h2>
           <button
             onClick={onCerrar}
@@ -95,20 +97,20 @@ export default function ModalDesbloqueo({
         </div>
 
         <p className="text-xs text-ink/60 mb-3">
-          Sube una foto que muestre la etapa "{etapaObjetivo}".
+          {t("modal.validateHint", t(`stage.${etapaObjetivo}`))}
         </p>
 
         <label className="sketchy-border bg-cream-dark flex flex-col items-center justify-center gap-2 p-6 cursor-pointer shadow-sketchy-sm">
           {previsualizacion ? (
             <img
               src={previsualizacion}
-              alt="Previsualización de la planta"
+              alt={t("modal.photoAlt")}
               className="max-h-48 object-contain"
             />
           ) : (
             <>
               <IconCamara className="w-10 h-10 text-leaf-dark" />
-              <span className="text-sm text-ink/70">Toca para subir una foto</span>
+              <span className="text-sm text-ink/70">{t("modal.uploadPrompt")}</span>
             </>
           )}
           <input type="file" accept="image/*" onChange={manejarArchivo} className="hidden" />
@@ -125,9 +127,9 @@ export default function ModalDesbloqueo({
           disabled={!archivo || estado === "subiendo" || estado === "validando"}
           className="sketchy-border w-full mt-5 bg-leaf text-cream font-hand text-lg py-2 shadow-sketchy-sm hover:-translate-y-0.5 transition-transform disabled:opacity-60"
         >
-          {estado === "subiendo" && "Subiendo foto..."}
-          {estado === "validando" && "Analizando con IA..."}
-          {(estado === "idle" || estado === "ok" || estado === "error") && "Validar foto"}
+          {estado === "subiendo" && t("modal.uploading")}
+          {estado === "validando" && t("modal.analyzing")}
+          {(estado === "idle" || estado === "ok" || estado === "error") && t("modal.validateBtn")}
         </button>
       </div>
     </div>

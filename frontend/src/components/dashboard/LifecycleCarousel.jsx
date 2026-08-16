@@ -3,6 +3,7 @@ import { ETAPAS } from "../../data/catalogoPlantas";
 import { obtenerIconoPlanta } from "../../assets/plants";
 import { indiceEtapa } from "../../utils/etapas";
 import { IconFlechaIzq, IconFlechaDer, IconCamara } from "../../assets/icons";
+import { useI18n } from "../../i18n/I18nContext";
 
 /**
  * LifecycleCarousel.jsx
@@ -13,14 +14,6 @@ import { IconFlechaIzq, IconFlechaDer, IconCamara } from "../../assets/icons";
  * Matches the mockup with hand-drawn borders and organic styling.
  */
 
-/** Duration labels per stage. */
-const DURACIONES_ETAPA = {
-  Brote: "1 – 2 semanas",
-  "Etapa Vegetativa": "3 – 10 semanas",
-  Floración: "según especie",
-  Madurez: "permanente",
-};
-
 function getCardClass(offset) {
   if (offset === 0) return "carousel-card carousel-card--active";
   if (offset === -1) return "carousel-card carousel-card--prev";
@@ -29,6 +22,7 @@ function getCardClass(offset) {
 }
 
 function StageCard({ etapa, indice, planta, offset, onSubirFoto }) {
+  const { t } = useI18n();
   const IconoEspecie = obtenerIconoPlanta(planta.especieId);
   const info = planta.etapas?.[etapa];
   const desbloqueada = !!info?.desbloqueada;
@@ -58,7 +52,7 @@ function StageCard({ etapa, indice, planta, offset, onSubirFoto }) {
         >
           {indice + 1}
         </span>
-        <span className="font-hand text-xl text-ink font-bold">{etapa}</span>
+        <span className="font-hand text-xl text-ink font-bold">{t(`stage.${etapa}`)}</span>
       </div>
 
       {/* Sketchy divider */}
@@ -92,12 +86,12 @@ function StageCard({ etapa, indice, planta, offset, onSubirFoto }) {
       )}
 
       {/* Duration */}
-      <p className="text-sm text-ink/60 text-center font-hand">{DURACIONES_ETAPA[etapa]}</p>
+      <p className="text-sm text-ink/60 text-center font-hand">{t(`lifecycle.duration.${etapa}`)}</p>
 
       {/* Status badge */}
       {desbloqueada ? (
         <span className="stage-badge stage-badge--completed text-sm">
-          ✓ día {diasVida ?? "?"}
+          {t("lifecycle.unlocked", diasVida ?? "?")}
         </span>
       ) : puedeSubirFoto ? (
         <button
@@ -107,16 +101,17 @@ function StageCard({ etapa, indice, planta, offset, onSubirFoto }) {
           }}
           className="stage-badge stage-badge--pending text-sm flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity"
         >
-          <IconCamara className="w-4 h-4" /> Subir foto
+          <IconCamara className="w-4 h-4" /> {t("lifecycle.uploadPhoto")}
         </button>
       ) : (
-        <span className="text-xs text-ink/30 font-hand italic">Bloqueada</span>
+        <span className="text-xs text-ink/30 font-hand italic">{t("lifecycle.locked")}</span>
       )}
     </div>
   );
 }
 
 export default function LifecycleCarousel({ planta, onAbrirValidacion }) {
+  const { t } = useI18n();
   const etapaActualNombre = planta.etapaActual || "Brote";
   const idxActual = indiceEtapa(etapaActualNombre);
   const [activeIdx, setActiveIdx] = useState(idxActual);
@@ -128,7 +123,7 @@ export default function LifecycleCarousel({ planta, onAbrirValidacion }) {
     <div className="dashboard-section" style={{ animationDelay: "0.2s" }}>
       {/* Section header — sketchy style */}
       <div className="flex items-center justify-between mb-4 px-2">
-        <h2 className="font-hand text-2xl sm:text-3xl text-ink font-bold">Ciclo de vida</h2>
+        <h2 className="font-hand text-2xl sm:text-3xl text-ink font-bold">{t("lifecycle.title")}</h2>
         <div className="flex items-center gap-2">
           <button
             id="btn-carousel-prev"

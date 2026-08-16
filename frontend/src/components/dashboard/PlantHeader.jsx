@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { IconFlor } from "../../assets/icons";
+import { useI18n } from "../../i18n/I18nContext";
 
 /**
  * PlantHeader.jsx
@@ -11,6 +12,7 @@ import { IconFlor } from "../../assets/icons";
  */
 export default function PlantHeader() {
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   return (
     <header className="flex items-center justify-between py-4 px-2 dashboard-section" style={{ animationDelay: "0s" }}>
@@ -21,7 +23,7 @@ export default function PlantHeader() {
         </div>
         <div>
           <h1 className="font-hand text-2xl sm:text-3xl text-ink leading-none">Pomarium</h1>
-          <p className="text-xs sm:text-sm text-ink/60 italic">cultiva. cuida. desbloquea.</p>
+          <p className="text-xs sm:text-sm text-ink/60 italic">{t("dashboard.tagline")}</p>
         </div>
       </div>
 
@@ -32,8 +34,8 @@ export default function PlantHeader() {
         className="sketchy-border bg-mustard text-ink font-hand text-base sm:text-lg px-4 sm:px-5 py-2 shadow-sketchy-sm hover:-translate-y-0.5 transition-transform flex items-center gap-2"
       >
         <IconFlor className="w-5 h-5 text-ink" />
-        <span className="hidden sm:inline">Cambiar planta</span>
-        <span className="sm:hidden">Cambiar</span>
+        <span className="hidden sm:inline">{t("dashboard.changePlant")}</span>
+        <span className="sm:hidden">{t("dashboard.changePlantShort")}</span>
       </button>
     </header>
   );

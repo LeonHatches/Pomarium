@@ -23,3 +23,5 @@ export { default as IconCerrar } from "./IconCerrar";
 export { default as IconFlor } from "./IconFlor";
 export { default as IconFlechaIzq } from "./IconFlechaIzq";
 export { default as IconFlechaDer } from "./IconFlechaDer";
+export { default as IconIdioma } from "./IconIdioma";
+export { default as IconBasura } from "./IconBasura";
