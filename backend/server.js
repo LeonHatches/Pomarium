@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const plantaRoutes = require("./routes/plantaRoutes");
 
 const app = express();
@@ -10,8 +11,12 @@ app.use(express.json({ limit: "10mb" }));
 
 app.use("/api", plantaRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Pomarium backend activo 🌱");
+// Servir archivos estáticos del frontend (React)
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+// Ruta comodín (catch-all) para que React Router maneje las URLs del frontend
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
 });
 
 const PORT = process.env.PORT || 4000;
