@@ -33,7 +33,7 @@ async function validarFotoPlanta(req, res) {
 
     // Petición REST directa a la API de Gemini
     // El modelo recomendado actual para tareas de visión es gemini-1.5-flash
-    const modelo = process.env.GEMINI_MODEL || "gemini-1.5-flash";
+    const modelo = "gemini-3.5-flash";
     const urlEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`;
     const bodyPeticion = {
       contents: [
@@ -67,7 +67,7 @@ async function validarFotoPlanta(req, res) {
 
     if (!respuestaApi.ok) {
       console.error(`Error de la API de Gemini (Status: ${respuestaApi.status}):`, resultadoJson);
-      
+
       if (respuestaApi.status === 400) {
         return res.status(400).json({ error: "Petición inválida a Gemini. Verifica tu API Key o el formato de la imagen." });
       }
