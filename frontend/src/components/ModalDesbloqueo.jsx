@@ -4,7 +4,7 @@ import { ETAPAS } from "../data/catalogoPlantas";
 import { IconCamara, IconCerrar } from "../assets/icons";
 import { useI18n } from "../i18n/I18nContext";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:4000";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000');
 
 /**
  * ModalDesbloqueo.jsx
