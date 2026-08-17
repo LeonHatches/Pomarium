@@ -66,7 +66,7 @@ function SketchyProgressRing({
   const fullRingPath = sketchyCirclePath(center, center, RADIUS);
 
   const displayText = remaining > 0
-    ? t("care.remaining", remaining, unit)
+    ? t("care.remaining", remaining, t(`unit.${unit}`))
     : t("care.needsNow", label.toLowerCase());
 
   return (
@@ -250,7 +250,7 @@ export default function CareTimers({ planta, onRegistrarCuidado }) {
           tipo="agua"
           remaining={remAgua}
           maxVal={cuidados.agua.valor}
-          unit={t(`unit.${cuidados.agua.unidad}`)}
+          unit={cuidados.agua.unidad}
           label={t("care.water")}
           sublabel={t(`careType.${cuidados.agua.tipo}`)}
           color="#4A90D9"
@@ -264,7 +264,7 @@ export default function CareTimers({ planta, onRegistrarCuidado }) {
           tipo="luz"
           remaining={remLuz}
           maxVal={cuidados.luz.valor}
-          unit={t(`unit.${cuidados.luz.unidad}`)}
+          unit={cuidados.luz.unidad}
           label={t("care.sunlight")}
           sublabel={t(`careType.${cuidados.luz.tipo}`)}
           color="#E8A838"
@@ -278,7 +278,7 @@ export default function CareTimers({ planta, onRegistrarCuidado }) {
           tipo="nutrientes"
           remaining={remNutrientes}
           maxVal={cuidados.nutrientes.valor}
-          unit={t(`unit.${cuidados.nutrientes.unidad}`)}
+          unit={cuidados.nutrientes.unidad}
           label={t("care.nutrients")}
           sublabel={t(`careType.${cuidados.nutrientes.tipo}`)}
           color="#8B6F47"

@@ -86,7 +86,7 @@ export default function App() {
 
     // Also update Firebase (async, don't wait for it to update UI)
     actualizarPlantaUsuario(usuario.uid, plantaId, {
-      historialCuidados: { [tipoCuidado]: ahora },
+      [`historialCuidados.${tipoCuidado}`]: ahora,
     }).catch(console.error);
   };
 
