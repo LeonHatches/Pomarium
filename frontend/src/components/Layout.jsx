@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar";
+import { useI18n } from "../i18n/I18nContext";
 
 /**
  * Layout.jsx
@@ -11,6 +12,8 @@ import Navbar from "./Navbar";
  * (Instagram, TikTok, etc.) — solo una firma breve.
  */
 export default function Layout({ children, usuario, onCerrarSesion }) {
+  const { t } = useI18n();
+
   return (
     <div className="min-h-screen flex flex-col bg-cream text-ink font-body">
       <Navbar usuario={usuario} onCerrarSesion={onCerrarSesion} />
@@ -21,10 +24,10 @@ export default function Layout({ children, usuario, onCerrarSesion }) {
 
       <footer className="sketchy-border bg-cream-dark mx-4 mb-4 px-5 py-4 text-sm text-ink/80 shadow-sketchy-sm">
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-center">
-          <p className="font-hand text-base">Pomarium — cultiva a tu ritmo 🌿</p>
+          <p className="font-hand text-base">{t("footer.tagline")}</p>
           <span className="hidden sm:inline text-ink/40">·</span>
           <p className="text-xs text-ink/60">
-            Hecho con cariño para quienes cuidan sus plantas paso a paso.
+            {t("footer.subtitle")}
           </p>
         </div>
       </footer>

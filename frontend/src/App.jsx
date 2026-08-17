@@ -12,13 +12,17 @@ import {
   crearPlantaUsuario,
   obtenerPlantasUsuario,
   desbloquearEtapaPlanta,
+  actualizarPlantaUsuario,
+  eliminarPlantaUsuario,
 } from "./firebase";
+import { useI18n } from "./i18n/I18nContext";
 
 export default function App() {
   const [usuario, setUsuario] = useState(null);
   const [cargandoAuth, setCargandoAuth] = useState(true);
   const [plantas, setPlantas] = useState(null); // null = sin cargar aún
   const [validacionAbierta, setValidacionAbierta] = useState(null); // plantaId | null
+  const { t } = useI18n();
 
   // Sesión + carga inicial de TODAS las plantas del usuario desde Firebase
   // (requerimiento 6): al recargar la página o volver a iniciar sesión,
@@ -65,10 +69,36 @@ export default function App() {
     setValidacionAbierta(null);
   };
 
+  const manejarCuidado = async (plantaId, tipoCuidado) => {
+    const ahora = new Date().toISOString();
+
+    setPlantas((prevPlantas) => {
+      const planta = prevPlantas.find((p) => p.id === plantaId);
+      if (!planta) return prevPlantas;
+
+      const cuidadosActuales = planta.historialCuidados || {};
+      const nuevosCuidados = { ...cuidadosActuales, [tipoCuidado]: ahora };
+
+      return prevPlantas.map((p) =>
+        p.id === plantaId ? { ...p, historialCuidados: nuevosCuidados } : p
+      );
+    });
+
+    // Also update Firebase (async, don't wait for it to update UI)
+    actualizarPlantaUsuario(usuario.uid, plantaId, {
+      historialCuidados: { [tipoCuidado]: ahora },
+    }).catch(console.error);
+  };
+
+  const manejarEliminarPlanta = async (plantaId) => {
+    await eliminarPlantaUsuario(usuario.uid, plantaId);
+    setPlantas((prev) => prev.filter((p) => p.id !== plantaId));
+  };
+
   if (cargandoAuth) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-cream">
-        <p className="font-hand text-2xl text-leaf-dark">Cargando Pomarium...</p>
+        <p className="font-hand text-2xl text-leaf-dark">{t("app.loading")}</p>
       </div>
     );
   }
@@ -81,7 +111,7 @@ export default function App() {
         <>
           <Routes>
             <Route path="/" element={<Navigate to="/mis-plantas" replace />} />
-            <Route path="/mis-plantas" element={<MisPlantas plantas={plantas} />} />
+            <Route path="/mis-plantas" element={<MisPlantas plantas={plantas} onEliminarPlanta={manejarEliminarPlanta} />} />
             <Route
               path="/agregar"
               element={<AgregarPlanta plantasUsuario={plantas || []} onCrearPlanta={manejarCrearPlanta} />}
@@ -92,6 +122,7 @@ export default function App() {
                 <VistaPlanta
                   plantas={plantas}
                   onAbrirValidacion={setValidacionAbierta}
+                  onRegistrarCuidado={manejarCuidado}
                 />
               }
             />
@@ -114,28 +145,35 @@ export default function App() {
 }
 
 /** Sub-vista que resuelve la planta actual a partir del parámetro de ruta. */
-function VistaPlanta({ plantas, onAbrirValidacion }) {
+function VistaPlanta({ plantas, onAbrirValidacion, onRegistrarCuidado }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   if (!plantas) {
-    return <p className="text-center text-ink/60 mt-10">Cargando...</p>;
+    return <p className="text-center text-ink/60 mt-10">{t("app.loadingGeneric")}</p>;
   }
 
   const planta = plantas.find((p) => p.id === id);
   if (!planta) {
     return (
       <div className="text-center mt-10">
-        <p className="text-ink/60 mb-4">No encontramos esa planta.</p>
+        <p className="text-ink/60 mb-4">{t("app.plantNotFound")}</p>
         <button
           onClick={() => navigate("/mis-plantas")}
           className="sketchy-border bg-leaf text-cream font-hand text-lg px-4 py-2 shadow-sketchy-sm"
         >
-          Volver a Mis Plantas
+          {t("app.backToMyPlants")}
         </button>
       </div>
     );
   }
 
-  return <Dashboard planta={planta} onAbrirValidacion={() => onAbrirValidacion(planta.id)} />;
+  return (
+    <Dashboard
+      planta={planta}
+      onAbrirValidacion={() => onAbrirValidacion(planta.id)}
+      onRegistrarCuidado={(tipo) => onRegistrarCuidado(planta.id, tipo)}
+    />
+  );
 }

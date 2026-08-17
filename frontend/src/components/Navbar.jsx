@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useI18n } from "../i18n/I18nContext";
 import {
   IconMisPlantas,
   IconAgregarPlanta,
@@ -7,6 +8,7 @@ import {
   IconSalir,
   IconMenu,
   IconCerrar,
+  IconIdioma,
 } from "../assets/icons";
 
 /**
@@ -21,6 +23,7 @@ import {
 export default function Navbar({ usuario, onCerrarSesion }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const navigate = useNavigate();
+  const { t, idioma, setIdioma } = useI18n();
 
   const cerrarYNavegar = (ruta) => {
     setMenuAbierto(false);
@@ -31,6 +34,10 @@ export default function Navbar({ usuario, onCerrarSesion }) {
     setMenuAbierto(false);
     await onCerrarSesion();
     navigate("/");
+  };
+
+  const toggleIdioma = () => {
+    setIdioma(idioma === "es" ? "en" : "es");
   };
 
   return (
@@ -46,16 +53,23 @@ export default function Navbar({ usuario, onCerrarSesion }) {
             {/* Navegación en escritorio */}
             <nav className="hidden md:flex items-center gap-2">
               <button
+                onClick={toggleIdioma}
+                className="sketchy-border px-3 py-1.5 text-sm font-hand text-lg bg-cream flex items-center gap-2 shadow-sketchy-sm hover:-translate-y-0.5 transition-transform"
+                aria-label="Cambiar idioma"
+              >
+                <IconIdioma className="w-5 h-5" /> {t("lang.label")}
+              </button>
+              <button
                 onClick={() => cerrarYNavegar("/mis-plantas")}
                 className="sketchy-border px-3 py-1.5 text-sm font-hand text-lg bg-cream flex items-center gap-2 shadow-sketchy-sm hover:-translate-y-0.5 transition-transform"
               >
-                <IconMisPlantas className="w-5 h-5" /> Mis Plantas
+                <IconMisPlantas className="w-5 h-5" /> {t("nav.myPlants")}
               </button>
               <button
                 onClick={() => cerrarYNavegar("/agregar")}
                 className="sketchy-border px-3 py-1.5 text-sm font-hand text-lg bg-leaf text-cream flex items-center gap-2 shadow-sketchy-sm hover:-translate-y-0.5 transition-transform"
               >
-                <IconAgregarPlanta className="w-5 h-5" /> Añadir planta
+                <IconAgregarPlanta className="w-5 h-5" /> {t("nav.addPlant")}
               </button>
               <div className="sketchy-border px-3 py-1.5 text-sm bg-cream flex items-center gap-2 shadow-sketchy-sm">
                 <IconUsuario className="w-5 h-5" />
@@ -67,7 +81,7 @@ export default function Navbar({ usuario, onCerrarSesion }) {
                 onClick={manejarCerrarSesion}
                 className="sketchy-border px-3 py-1.5 text-sm font-hand text-lg bg-clay text-cream flex items-center gap-2 shadow-sketchy-sm hover:-translate-y-0.5 transition-transform"
               >
-                <IconSalir className="w-5 h-5" /> Cerrar sesión
+                <IconSalir className="w-5 h-5" /> {t("nav.logout")}
               </button>
             </nav>
 
@@ -75,7 +89,7 @@ export default function Navbar({ usuario, onCerrarSesion }) {
             <button
               className="md:hidden sketchy-border w-10 h-10 flex items-center justify-center bg-cream shadow-sketchy-sm"
               onClick={() => setMenuAbierto((v) => !v)}
-              aria-label="Abrir menú"
+              aria-label={t("nav.openMenu")}
             >
               {menuAbierto ? <IconCerrar className="w-5 h-5" /> : <IconMenu className="w-5 h-5" />}
             </button>
@@ -91,22 +105,28 @@ export default function Navbar({ usuario, onCerrarSesion }) {
             <span className="truncate">{usuario.displayName || usuario.email}</span>
           </div>
           <button
+            onClick={toggleIdioma}
+            className="sketchy-border px-3 py-2 text-sm font-hand text-lg bg-cream flex items-center gap-2 shadow-sketchy-sm"
+          >
+            <IconIdioma className="w-5 h-5" /> {t("lang.label")}
+          </button>
+          <button
             onClick={() => cerrarYNavegar("/mis-plantas")}
             className="sketchy-border px-3 py-2 text-sm font-hand text-lg bg-cream flex items-center gap-2 shadow-sketchy-sm"
           >
-            <IconMisPlantas className="w-5 h-5" /> Mis Plantas
+            <IconMisPlantas className="w-5 h-5" /> {t("nav.myPlants")}
           </button>
           <button
             onClick={() => cerrarYNavegar("/agregar")}
             className="sketchy-border px-3 py-2 text-sm font-hand text-lg bg-leaf text-cream flex items-center gap-2 shadow-sketchy-sm"
           >
-            <IconAgregarPlanta className="w-5 h-5" /> Añadir planta
+            <IconAgregarPlanta className="w-5 h-5" /> {t("nav.addPlant")}
           </button>
           <button
             onClick={manejarCerrarSesion}
             className="sketchy-border px-3 py-2 text-sm font-hand text-lg bg-clay text-cream flex items-center gap-2 shadow-sketchy-sm"
           >
-            <IconSalir className="w-5 h-5" /> Cerrar sesión
+            <IconSalir className="w-5 h-5" /> {t("nav.logout")}
           </button>
         </div>
       )}

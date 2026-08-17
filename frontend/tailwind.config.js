@@ -23,10 +23,23 @@ module.exports = {
         },
         mustard: "#E3B23C",
         coral: "#E86F5C",
+        water: {
+          DEFAULT: "#4A90D9",
+          light: "#A8CCF0",
+        },
+        soil: {
+          DEFAULT: "#8B6F47",
+          light: "#C4A882",
+        },
+        sun: {
+          DEFAULT: "#E8A838",
+          light: "#F5D18E",
+        },
       },
       fontFamily: {
         hand: ["'Patrick Hand'", "cursive"],
-        body: ["'Nunito'", "sans-serif"],
+        body: ["'Shantell Sans'", "cursive"],
+        sans: ["'Shantell Sans'", "cursive"],
       },
       boxShadow: {
         sketchy: "4px 4px 0px 0px rgba(46,42,36,0.85)",

@@ -116,3 +116,112 @@ export function idsPlantasDecorativas() {
   const cat = CATEGORIAS_PLANTAS.find((c) => c.desbloqueoInicial);
   return cat ? cat.plantas.map((p) => p.id) : [];
 }
+
+/**
+ * Cuidados numéricos por especie y etapa — alimentan los anillos circulares
+ * del Dashboard rediseñado. Cada valor es { valor, unidad, tipo }.
+ */
+export const CUIDADOS_POR_ETAPA = {
+  "cactus-estrella": {
+    Brote: {
+      agua: { valor: 7, unidad: "días", tipo: "riego ligero" },
+      luz:  { valor: 4, unidad: "h", tipo: "indirecta" },
+      nutrientes: { valor: 0, unidad: "días", tipo: "ninguno aún" },
+    },
+    "Etapa Vegetativa": {
+      agua: { valor: 12, unidad: "días", tipo: "riego profundo" },
+      luz:  { valor: 6, unidad: "h", tipo: "sol directo" },
+      nutrientes: { valor: 30, unidad: "días", tipo: "bajo en nitrógeno" },
+    },
+    Floración: {
+      agua: { valor: 10, unidad: "días", tipo: "riego moderado" },
+      luz:  { valor: 6, unidad: "h", tipo: "directa parcial" },
+      nutrientes: { valor: 15, unidad: "días", tipo: "fósforo alto" },
+    },
+    Madurez: {
+      agua: { valor: 14, unidad: "días", tipo: "riego espaciado" },
+      luz:  { valor: 8, unidad: "h", tipo: "sol directo" },
+      nutrientes: { valor: 30, unidad: "días", tipo: "mantenimiento" },
+    },
+  },
+  _default: {
+    Brote: {
+      agua: { valor: 3, unidad: "días", tipo: "riego ligero" },
+      luz:  { valor: 4, unidad: "h", tipo: "indirecta" },
+      nutrientes: { valor: 0, unidad: "días", tipo: "ninguno aún" },
+    },
+    "Etapa Vegetativa": {
+      agua: { valor: 5, unidad: "días", tipo: "riego moderado" },
+      luz:  { valor: 6, unidad: "h", tipo: "indirecta" },
+      nutrientes: { valor: 15, unidad: "días", tipo: "abono suave" },
+    },
+    Floración: {
+      agua: { valor: 4, unidad: "días", tipo: "riego regular" },
+      luz:  { valor: 6, unidad: "h", tipo: "directa parcial" },
+      nutrientes: { valor: 10, unidad: "días", tipo: "rico en fósforo" },
+    },
+    Madurez: {
+      agua: { valor: 7, unidad: "días", tipo: "semanal" },
+      luz:  { valor: 7, unidad: "h", tipo: "directa" },
+      nutrientes: { valor: 30, unidad: "días", tipo: "mantenimiento" },
+    },
+  },
+};
+
+/** Devuelve los cuidados numéricos para una especie y etapa dadas. */
+export function obtenerCuidados(especieId, etapa) {
+  const porEspecie = CUIDADOS_POR_ETAPA[especieId] || CUIDADOS_POR_ETAPA._default;
+  return porEspecie[etapa] || porEspecie["Brote"];
+}
+
+/**
+ * Metadatos extra por especie para la vista de perfil: familia botánica,
+ * nombre científico y nivel de dificultad.
+ */
+export const METADATA_PLANTAS = {
+  "cactus-estrella": {
+    familia: "Cactaceae",
+    cientifico: "Astrophytum",
+    dificultad: "Fácil",
+  },
+  "suculenta-rosa": {
+    familia: "Crassulaceae",
+    cientifico: "Echeveria",
+    dificultad: "Fácil",
+  },
+  "aloe-vera": {
+    familia: "Asphodelaceae",
+    cientifico: "Aloe barbadensis",
+    dificultad: "Fácil",
+  },
+  "albahaca": {
+    familia: "Lamiaceae",
+    cientifico: "Ocimum basilicum",
+    dificultad: "Media",
+  },
+  "rabano": {
+    familia: "Brassicaceae",
+    cientifico: "Raphanus sativus",
+    dificultad: "Fácil",
+  },
+  "tomatero": {
+    familia: "Solanaceae",
+    cientifico: "Solanum lycopersicum",
+    dificultad: "Media",
+  },
+  "fresa": {
+    familia: "Rosaceae",
+    cientifico: "Fragaria × ananassa",
+    dificultad: "Media",
+  },
+  "limonero": {
+    familia: "Rutaceae",
+    cientifico: "Citrus × limon",
+    dificultad: "Difícil",
+  },
+};
+
+/** Devuelve los metadatos de una especie o un fallback genérico. */
+export function obtenerMetadata(especieId) {
+  return METADATA_PLANTAS[especieId] || { familia: "Planta", cientifico: "", dificultad: "Media" };
+}

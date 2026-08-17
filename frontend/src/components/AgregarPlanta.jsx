@@ -4,6 +4,11 @@ import { catalogoConEstadoDesbloqueo } from "../utils/desbloqueo";
 import { resolverInicioPlanta } from "../utils/etapas";
 import { obtenerIconoPlanta } from "../assets/plants";
 import { IconCandado } from "../assets/icons";
+import { useI18n } from "../i18n/I18nContext";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import es from "date-fns/locale/es";
+import enUS from "date-fns/locale/en-US";
 
 /**
  * AgregarPlanta.jsx
@@ -22,6 +27,7 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
   const [paso, setPaso] = useState(1); // 1 categoría, 2 especie, 3 formulario
   const [categoriaElegida, setCategoriaElegida] = useState(null);
   const [especieElegida, setEspecieElegida] = useState(null);
+  const { t, idioma } = useI18n();
 
   const [nombrePersonalizado, setNombrePersonalizado] = useState("");
   const [modoTiempo, setModoTiempo] = useState("cantidad"); // "cantidad" | "fecha"
@@ -55,18 +61,19 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
 
   const manejarSubmit = async (e) => {
     e.preventDefault();
+    e.preventDefault();
     setError("");
 
     if (!nombrePersonalizado.trim()) {
-      setError("Ponle un nombre a tu planta para continuar.");
+      setError(t("agregar.errorName"));
       return;
     }
     if (modoTiempo === "cantidad" && (cantidad === "" || Number(cantidad) < 0)) {
-      setError("Indica cuánto tiempo tiene tu planta.");
+      setError(t("agregar.errorTime"));
       return;
     }
     if (modoTiempo === "fecha" && !fecha) {
-      setError("Elige la fecha en que empezó tu planta.");
+      setError(t("agregar.errorDate"));
       return;
     }
 
@@ -87,7 +94,7 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
       diasDeVida,
       etapaActual: etapaInicial,
       etapas: {
-        Brote: { desbloqueada: true, fotoURL: null, fechaDesbloqueo: null },
+        Brote: { desbloqueada: false, fotoURL: null, fechaDesbloqueo: null },
         "Etapa Vegetativa": { desbloqueada: etapaInicial !== "Brote", fotoURL: null, fechaDesbloqueo: null },
         Floración: {
           desbloqueada: etapaInicial === "Floración" || etapaInicial === "Madurez",
@@ -103,7 +110,7 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
       await onCrearPlanta(nuevaPlanta);
       navigate(`/planta/${nuevaPlanta.id}`);
     } catch (err) {
-      setError("No se pudo guardar la planta. Intenta de nuevo.");
+      setError(t("agregar.errorSave"));
     } finally {
       setGuardando(false);
     }
@@ -119,9 +126,9 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
           ←
         </button>
         <h1 className="font-hand text-3xl text-leaf-dark">
-          {paso === 1 && "Elige una categoría"}
-          {paso === 2 && categoriaElegida?.categoria}
-          {paso === 3 && `¿Cómo se llama tu ${especieElegida?.nombre}?`}
+          {paso === 1 && t("agregar.chooseCategory")}
+          {paso === 2 && t(`category.${categoriaElegida?.categoria}`)}
+          {paso === 3 && t("agregar.nameYour", t(`category.${especieElegida?.nombre}`) || especieElegida?.nombre)}
         </h1>
       </div>
 
@@ -139,17 +146,16 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
               }`}
             >
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-hand text-xl">{cat.categoria}</h3>
+                <h3 className="font-hand text-xl">{t(`category.${cat.categoria}`)}</h3>
                 {cat.bloqueada && <IconCandado className="w-6 h-6 text-ink/50" />}
               </div>
-              <p className="text-xs text-ink/60 mb-1">{cat.duracion}</p>
+              <p className="text-xs text-ink/60 mb-1">{t(`duration.${cat.duracion}`)}</p>
               {cat.bloqueada ? (
                 <p className="text-xs text-clay">
-                  Completa las {cat.progreso.total} Plantas Decorativas para
-                  desbloquear ({cat.progreso.hechas}/{cat.progreso.total})
+                  {t("agregar.unlockHint", cat.progreso.total, cat.progreso.hechas, cat.progreso.total)}
                 </p>
               ) : (
-                <p className="text-xs text-leaf-dark">Disponible</p>
+                <p className="text-xs text-leaf-dark">{t("agregar.available")}</p>
               )}
             </button>
           ))}
@@ -167,9 +173,9 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
                 className="sketchy-border bg-cream-dark p-4 flex flex-col items-center gap-2 shadow-sketchy-sm hover:-translate-y-0.5 transition-transform"
               >
                 <Icono className="w-12 h-12 text-leaf-dark" />
-                <span className="text-sm text-center">{planta.nombre}</span>
+                <span className="text-sm text-center">{t(`category.${planta.nombre}`) || planta.nombre}</span>
                 {planta.esDemo && (
-                  <span className="text-[10px] bg-mustard px-2 py-0.5 rounded-full">Demo</span>
+                  <span className="text-[10px] bg-mustard px-2 py-0.5 rounded-full">{t("agregar.demo")}</span>
                 )}
               </button>
             );
@@ -183,11 +189,11 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
           className="sketchy-border bg-cream-dark shadow-sketchy p-6 max-w-lg flex flex-col gap-5"
         >
           <div>
-            <label className="font-hand text-lg block mb-1">Nombre de tu planta *</label>
+            <label className="font-hand text-lg block mb-1">{t("agregar.nameLabel")}</label>
             <input
               type="text"
               required
-              placeholder='Ej. "Pica-Pica", "Frida"...'
+              placeholder={t("agregar.namePlaceholder")}
               value={nombrePersonalizado}
               onChange={(e) => setNombrePersonalizado(e.target.value)}
               className="sketchy-border bg-cream w-full px-4 py-2 outline-none focus:shadow-sketchy-sm"
@@ -195,7 +201,7 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
           </div>
 
           <div>
-            <label className="font-hand text-lg block mb-2">¿Cuánto tiempo tiene? *</label>
+            <label className="font-hand text-lg block mb-2">{t("agregar.timeLabel")}</label>
             <div className="flex gap-2 mb-3">
               <button
                 type="button"
@@ -204,7 +210,7 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
                   modoTiempo === "cantidad" ? "bg-leaf text-cream" : "bg-cream"
                 }`}
               >
-                Semanas / meses
+                {t("agregar.modeAmount")}
               </button>
               <button
                 type="button"
@@ -213,7 +219,7 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
                   modoTiempo === "fecha" ? "bg-leaf text-cream" : "bg-cream"
                 }`}
               >
-                Fecha de inicio
+                {t("agregar.modeDate")}
               </button>
             </div>
 
@@ -231,22 +237,35 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
                   onChange={(e) => setUnidad(e.target.value)}
                   className="sketchy-border bg-cream px-4 py-2 outline-none w-1/2 focus:shadow-sketchy-sm"
                 >
-                  <option value="semanas">Semanas</option>
-                  <option value="meses">Meses</option>
+                  <option value="semanas">{t("agregar.weeks")}</option>
+                  <option value="meses">{t("agregar.months")}</option>
                 </select>
               </div>
             ) : (
-              <input
-                type="date"
-                value={fecha}
-                max={new Date().toISOString().slice(0, 10)}
-                onChange={(e) => setFecha(e.target.value)}
-                className="sketchy-border bg-cream px-4 py-2 outline-none w-full focus:shadow-sketchy-sm"
-              />
+              <div className="w-full relative sketchy-datepicker-container">
+                <DatePicker
+                  selected={fecha ? new Date(fecha + "T12:00:00") : null}
+                  onChange={(date) => {
+                    if (date) {
+                      const yyyy = date.getFullYear();
+                      const mm = String(date.getMonth() + 1).padStart(2, "0");
+                      const dd = String(date.getDate()).padStart(2, "0");
+                      setFecha(`${yyyy}-${mm}-${dd}`);
+                    } else {
+                      setFecha("");
+                    }
+                  }}
+                  maxDate={new Date()}
+                  locale={idioma === "en" ? enUS : es}
+                  dateFormat={idioma === "en" ? "MM/dd/yyyy" : "dd/MM/yyyy"}
+                  placeholderText={t("agregar.datePlaceholder")}
+                  className="sketchy-border bg-cream px-4 py-2 outline-none w-full focus:shadow-sketchy-sm"
+                  wrapperClassName="w-full"
+                />
+              </div>
             )}
             <p className="text-xs text-ink/60 mt-2">
-              Según el tiempo que indiques, tu planta arrancará automáticamente
-              en la etapa correcta de su ciclo de vida (no siempre en "Brote").
+              {t("agregar.timeHint")}
             </p>
           </div>
 
@@ -257,7 +276,7 @@ export default function AgregarPlanta({ plantasUsuario, onCrearPlanta }) {
             disabled={guardando}
             className="sketchy-border bg-leaf text-cream font-hand text-lg py-2 shadow-sketchy-sm hover:-translate-y-0.5 transition-transform disabled:opacity-60"
           >
-            {guardando ? "Guardando..." : "Registrar planta 🌱"}
+            {guardando ? t("agregar.saving") : t("agregar.submit")}
           </button>
         </form>
       )}
