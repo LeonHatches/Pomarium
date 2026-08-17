@@ -102,7 +102,7 @@ const en = {
   "care.water": "Water",
   "care.sunlight": "Sunlight",
   "care.nutrients": "Nutrients",
-  "care.waterBtn": "Water",
+  "care.waterBtn": "Water now",
   "care.sunBtn": "Sunlight",
   "care.nutrientsBtn": "Fertilize",
   "care.aguaNow": "Water now!",

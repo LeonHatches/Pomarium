@@ -66,7 +66,7 @@ function SketchyProgressRing({
   const fullRingPath = sketchyCirclePath(center, center, RADIUS);
 
   const displayText = remaining > 0
-    ? t("care.remaining", remaining, t(`unit.${unit}`))
+    ? t("care.remaining", remaining, unit)
     : t("care.needsNow", label.toLowerCase());
 
   return (
