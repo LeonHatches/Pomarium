@@ -1,73 +1,118 @@
 # Pomarium
 
-Proyecto desarrollado para **Oregon's Nature + Tech hackathon for students**, con el prompt: *"Build technology that helps people reconnect with nature or support environmental health"*.
+Project developed for **Oregon's Nature + Tech hackathon for students**, with the prompt: *"Build technology that helps people reconnect with nature or support environmental health"*.
 
 ---
 
-## Descripción
+## Description
 
-Pomarium es una aplicación web que convierte el cuidado de plantas reales en una experiencia a largo plazo. Los usuarios registran una planta real y visualizan su ciclo de vida a través de la aplicación web.
+Pomarium is a web application that turns the care of real plants into a long-term experience. Users register a real plant and watch its life cycle unfold through the web app.
 
-Las etapas de crecimiento, brote, etapa vegetativa, floración y fructificación (dependiendo de la especie de planta), aparecen inicialmente como siluetas oscuras y bloqueadas. A medida que el usuario haga los correspondientes cuidados de la planta, el sistema valida ese progreso y las siluetas se desbloquean revelando su diseño a todo color. De esta forma, la app recompensa la paciencia, la constancia y el compromiso con el cuidado real de la naturaleza.
-
----
-
-## Problema
-
-Cuidar una planta es un proceso lento y poco gratificante a corto plazo, por lo que mucha gente pierde el interés antes de ver resultados. Pomarium busca reconectar a las personas con la naturaleza mostrandoles retroalimentación visual constante y motivadora durante todo el ciclo de vida real de su planta.
+The growth stages, sprout, vegetative stage, flowering, and fruiting (depending on the plant species), initially appear as dark, locked silhouettes. As the user carries out the corresponding plant care tasks, the system validates that progress and the silhouettes unlock, revealing their full-color design. In this way, the app rewards patience, consistency, and commitment to real, hands-on nature care.
 
 ---
 
-## Características principales
+## Problem
 
-- Aplicación web responsive, optimizada tanto para PC como para dispositivos móviles.
-- Sistema de desbloqueo progresivo de etapas de crecimiento, basado en evidencia real (fotos + tiempo transcurrido).
-- Registro de fotos para validar el avance de la planta.
-- Recomendaciones de cuidado personalizadas según la especie y la etapa de vida.
+Caring for a plant is a slow process with little short-term reward, which causes many people to lose interest before seeing results. Pomarium aims to reconnect people with nature by providing constant, motivating visual feedback throughout their plant's entire real-life cycle.
 
 ---
 
-## Capturas de pantalla
+## Key Features
 
-**Figma**
-
-**Captura 1**
-
-**Captura 2**
-
-**Captura 3**
+- Tracking of real plants with an individual record throughout their life cycle.
+- Visual progress of the plant's development through stages.
+- Photographic evidence to verify the plant's evolution.
+- Personalized recommendations for plant care.
 
 ---
 
-## Funcionalidades
+## Screenshots
+ 
+<img src="docs/images/design2.png" alt="Page design made in Figma" width="600">
 
-- **Selección de planta:** el usuario elige la planta que adquirió para hacerle seguimiento, escogiendo si se inicia desde semilla o alguna otra edad.
-- **Ciclo de vida visual:** el crecimiento se representa mediante etapas como brote (1-2 semanas), etapa vegetativa, floración y fructificación.
-- **Desbloqueo por evidencia:** cada etapa se desbloquea cuando el usuario toma una foto de su planta y muestra el crecimiento de su planta, registrando de esta forma su avance.
-- **Guía de cuidados por etapa:** en cada etapa se muestran recomendaciones específicas para esa planta: cantidad de agua, luz solar, nutrientes, entre otros.
+*Design made in Figma*
+ 
+<img src="docs/images/capture1.jpg" alt="Login" width="300">
+
+*Login*
+ 
+<img src="docs/images/capture2.jpg" alt="Plant collection" width="300">
+
+*Plant collection*
+ 
+<img src="docs/images/capture3.jpg" alt="Plant type selection" width="300">
+
+*Plant type selection*
+ 
+<img src="docs/images/capture4.jpg" alt="New plant form" width="300">
+
+*New plant form*
+ 
+<img src="docs/images/capture5.jpg" alt="Plant visualization" width="300">
+
+*Plant visualization*
+ 
+<img src="docs/images/capture6.jpg" alt="Plant life cycle" width="300">
+
+*Plant life cycle*
+ 
+<img src="docs/images/capture7.jpg" alt="Plant care" width="300">
+
+*Plant care*
+ 
+<img src="docs/images/capture8.jpg" alt="Care tips" width="300">
+
+*Care tips*
+ 
+<img src="docs/images/capture9.jpg" alt="Photo upload screen" width="300">
+
+*Photo upload screen*
+ 
+<img src="docs/images/capture10.jpg" alt="AI photo validation" width="300">
+
+*AI photo validation*
+ 
+<img src="docs/images/capture11.jpg" alt="Life stage documentation" width="300">
+
+*Life stage documentation*
+
 
 ---
 
-## Tecnologías utilizadas
+## Functionalities
 
-| Componente | Tecnología |
+- **Plant registration:** the user chooses the plant they acquired to track, selecting whether to start from a seed or another age.
+- **Growth tracking:** growth is represented through stages such as sprout (1-2 weeks), vegetative stage, flowering, and fruiting.
+- **Evidence logging:** each stage unlocks when the user takes a photo of their plant showing its growth, thereby recording their progress.
+- **Care recommendations:** at each stage, specific recommendations are shown for that plant: amount of water, sunlight, nutrients, among others.
+
+---
+
+## Technologies Used
+
+| Technology | Component |
 |---|---|
-| Backend | Node.js |
-| Frontend | React.js |
-| Base de datos / Auth / Imágenes | Firebase |
-| Generación de imágenes | API Gemini |
+| React | Frontend |
+| Express | Backend |
+| Firebase | Database |
+| Gemini API | Image recognition |
+| Render | Hosting platform |
+
+## Use of Artificial Intelligence
+
+During the development of Pomarium, several AI tools were used: Figma for initial sketches of the website, Claude for backend and frontend development, and Gemini to create the plant images shown in the web app. AI was also used to present the data for each plant in this presentation.
 
 ---
 
-## Instalación
+## Project Link
 
-Proceso de instalación para probar el proyecto
+[Pomarium Website Link](https://pomarium.onrender.com)
 
 ---
 
-## Equipo
+## Team
 
 - **Quispe Bedregal, Joaquín Alejandro**
 - **Hatches Curo, José León Enrique**
 - **Camargo Choque, Romina Guiliana**
-
