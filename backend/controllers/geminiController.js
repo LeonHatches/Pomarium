@@ -1,8 +1,15 @@
 async function descargarImagenComoBase64(imageUrl) {
-  const respuesta = await fetch(imageUrl);
-  if (!respuesta.ok) {
-    throw new Error(`No se pudo descargar la imagen (${respuesta.status})`);
+  let respuesta;
+  try {
+    respuesta = await fetch(imageUrl);
+  } catch (error) {
+    throw new Error(`Error de red al intentar acceder a la URL de la imagen: ${error.message}`);
   }
+
+  if (!respuesta.ok) {
+    throw new Error(`La URL de la imagen no es accesible (Código HTTP: ${respuesta.status})`);
+  }
+
   const mimeType = respuesta.headers.get("content-type") || "image/jpeg";
   const arrayBuffer = await respuesta.arrayBuffer();
   const base64 = Buffer.from(arrayBuffer).toString("base64");
@@ -24,12 +31,9 @@ async function validarFotoPlanta(req, res) {
 
     const promptTexto = `Verifica si la imagen adjunta es la planta ${nombrePlanta} en la etapa de ${etapaActual}. Responde únicamente con 'true' si lo es, o 'false' si no lo es.`;
 
-    // Petición REST directa a la API de Gemini (compatible con claves tipo AQ... o AIzaSy...)
-    // Nota: "gemini-3.5-flash" no es un modelo válido de la API pública — se
-    // corrigió al modelo de visión vigente. Verifica el nombre exacto y
-    // disponibilidad de modelos en https://ai.google.dev/gemini-api/docs/models
-    // antes de desplegar a producción, ya que Google actualiza esta lista.
-    const modelo = process.env.GEMINI_MODEL || "gemini-3.5-flash";
+    // Petición REST directa a la API de Gemini
+    // El modelo recomendado actual para tareas de visión es gemini-1.5-flash
+    const modelo = process.env.GEMINI_MODEL || "gemini-1.5-flash";
     const urlEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`;
     const bodyPeticion = {
       contents: [
@@ -47,17 +51,35 @@ async function validarFotoPlanta(req, res) {
       ],
     };
 
-    const respuestaApi = await fetch(urlEndpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(bodyPeticion),
-    });
+    let respuestaApi;
+    try {
+      respuestaApi = await fetch(urlEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bodyPeticion),
+      });
+    } catch (e) {
+      console.error("Error de red llamando a Gemini:", e);
+      return res.status(500).json({ error: "Error de red al intentar conectar con la API de Google Gemini." });
+    }
 
     const resultadoJson = await respuestaApi.json();
 
     if (!respuestaApi.ok) {
-      console.error("Error de la API de Gemini:", resultadoJson);
-      return res.status(500).json({ error: "Error al comunicarse con Gemini" });
+      console.error(`Error de la API de Gemini (Status: ${respuestaApi.status}):`, resultadoJson);
+      
+      if (respuestaApi.status === 400) {
+        return res.status(400).json({ error: "Petición inválida a Gemini. Verifica tu API Key o el formato de la imagen." });
+      }
+      if (respuestaApi.status === 503) {
+        return res.status(503).json({ error: "El servicio de validación está saturado temporalmente por alta demanda. Por favor, intenta de nuevo en unos segundos." });
+      }
+      if (respuestaApi.status === 429) {
+        return res.status(429).json({ error: "Has alcanzado el límite de peticiones de la API. Por favor, intenta de nuevo más tarde." });
+      }
+
+      const errorMessage = resultadoJson?.error?.message || "Error desconocido";
+      return res.status(500).json({ error: `Error interno de Gemini: ${errorMessage}` });
     }
 
     const textoRespuesta =
@@ -66,8 +88,9 @@ async function validarFotoPlanta(req, res) {
 
     return res.json({ esValida });
   } catch (error) {
-    console.error("Error validando foto con Gemini:", error);
-    return res.status(500).json({ error: "Error al validar la imagen" });
+    console.error("Error validando foto:", error);
+    // Propagamos el mensaje específico del error (ej: si falló la descarga de la imagen)
+    return res.status(500).json({ error: error.message || "Error inesperado al validar la imagen" });
   }
 }
 
