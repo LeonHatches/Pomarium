@@ -28,54 +28,55 @@ Caring for a plant is a slow process with little short-term reward, which causes
 ---
 
 ## Screenshots
-
-![Page design made in Figma](docs/images/design2.png)
+ 
+<img src="docs/images/design2.png" alt="Page design made in Figma" width="600">
 
 *Design made in Figma*
-
-![Login](docs/images/capture1.jpg)
+ 
+<img src="docs/images/capture1.jpg" alt="Login" width="300">
 
 *Login*
-
-![Plant collection](docs/images/capture2.jpg)
+ 
+<img src="docs/images/capture2.jpg" alt="Plant collection" width="300">
 
 *Plant collection*
-
-![Plant type selection](docs/images/capture3.jpg)
+ 
+<img src="docs/images/capture3.jpg" alt="Plant type selection" width="300">
 
 *Plant type selection*
-
-![New plant form](docs/images/capture4.jpg)
+ 
+<img src="docs/images/capture4.jpg" alt="New plant form" width="300">
 
 *New plant form*
-
-![Plant visualization](docs/images/capture5.jpg)
+ 
+<img src="docs/images/capture5.jpg" alt="Plant visualization" width="300">
 
 *Plant visualization*
-
-![Plant life cycle](docs/images/capture6.jpg)
+ 
+<img src="docs/images/capture6.jpg" alt="Plant life cycle" width="300">
 
 *Plant life cycle*
-
-![Plant care](docs/images/capture7.jpg)
+ 
+<img src="docs/images/capture7.jpg" alt="Plant care" width="300">
 
 *Plant care*
-
-![Care tips](docs/images/capture8.jpg)
+ 
+<img src="docs/images/capture8.jpg" alt="Care tips" width="300">
 
 *Care tips*
-
-![Photo upload screen](docs/images/capture9.jpg)
+ 
+<img src="docs/images/capture9.jpg" alt="Photo upload screen" width="300">
 
 *Photo upload screen*
-
-![AI photo validation](docs/images/capture10.jpg)
+ 
+<img src="docs/images/capture10.jpg" alt="AI photo validation" width="300">
 
 *AI photo validation*
-
-![Life stage documentation](docs/images/capture11.jpg)
+ 
+<img src="docs/images/capture11.jpg" alt="Life stage documentation" width="300">
 
 *Life stage documentation*
+
 
 ---
 
